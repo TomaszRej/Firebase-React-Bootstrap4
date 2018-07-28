@@ -1,0 +1,78 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  min-height: 100vh;
+  background-image: url("tiande.jpg");
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-attachment: fixed;
+
+  height: 100%;
+  width: 100%;
+}
+.main-block {
+  border: 3px yellow solid;
+}
+.wrapper {
+}
+.container-flow {
+  flex-direction: column;
+}
+.login-container {
+  color: white;
+  height: 100%;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.test {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.all-orders {
+  align-items: center;
+  justify-content: space-evenly;
+}
+.main-block {
+  padding: 10px;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 10px;
+  height: 48vh;
+  width: 24vw;
+  min-width: 300px;
+  min-height: 300px;
+  box-shadow: 0px 0px 41px -7px rgba(0, 0, 0, 0.75);
+}
+
+.title {
+  padding: 15px;
+
+  background-color: rgba(255, 255, 255, 0.4);
+  font-family: "Titillium Web", sans-serif;
+  min-width: 350px;
+}
+input {
+  width: 100%;
+  padding: 20px;
+}
+/*
+.form-group {
+  background: pink;
+}
+*/
+.btn {
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
