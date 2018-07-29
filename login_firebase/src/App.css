@@ -4,18 +4,14 @@ body {
   padding: 0;
   font-family: sans-serif;
   min-height: 100vh;
-  background-image: url("tiande.jpg");
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-attachment: fixed;
 
   height: 100%;
   width: 100%;
 }
-.main-block {
-  border: 3px yellow solid;
-}
-.wrapper {
+.button {
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
 }
 .container-flow {
   flex-direction: column;
@@ -28,6 +24,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  background-image: url("tiande.jpg");
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-attachment: fixed;
 }
 .test {
   display: flex;

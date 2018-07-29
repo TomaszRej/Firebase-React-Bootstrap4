@@ -58,23 +58,32 @@ class Home extends Component {
   }
 */
   componentDidMount() {
-    const itemsRef2 = fire.database().ref("orders/ZAMOWIENIE");
-
-    for (var x in itemsRef2) {
-      if (itemsRef2[x].key === "ZAMOWIENIE") {
-        console.log(itemsRef2[x].key);
-        console.log(itemsRef2[x].child("A").key);
-        //for (let order in itemsRef2) {
-        //  console.log(order);
-        // }
-      }
-    }
-
     const itemsRef = fire.database().ref("orders");
     itemsRef.on("value", snapshot => {
       let items = snapshot.val();
+      console.log("-------------");
+      //console.log(items);
       let newState = [];
       for (let item in items) {
+        //console.log(items[item]);
+        for (let inside in items[item]) {
+          //console.log(items[item][inside]);
+          for (let i in items[item][inside]) {
+            //console.log(i);
+
+            newState.push({
+              city: items[item][inside].city
+            });
+            console.log("/////////////");
+            console.log(items[item][inside].city);
+            console.log("/////////////");
+          }
+          this.setState({
+            orders: newState
+          });
+        }
+      }
+      /*for (let item in items) {
         newState.push({
           id: item,
           name: items[item].DANE_KLIENTA.name,
@@ -92,10 +101,12 @@ class Home extends Component {
           zam2: items[item].ZAMOWIENIE[0].B
         });
       }
-      this.setState({
-        orders: newState
-      });
+      */
+      // this.setState({
+      //   orders: newState
+      // });
     });
+
     /*
   const itemsRef2 = fire.database().ref("orders");
   const xyz = itemsRef2.child("orders/ZAMOWIENIE");
@@ -129,68 +140,77 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <div className="container-flow d-flex">
-          <button
-            onClick={this.logout}
-            className="btn btn-success btn-lg btn-block w-25  align-self-center"
-          >
+        <main className="container">
+          <button onClick={this.logout} className="btn btn-success btn-lg ml-3">
             Logout
           </button>
-          <h1 className="title align-self-center text-center text-white display-4 mb-4">
-            TIANDE
-          </h1>
-        </div>
 
-        <div>
-          <section>
-            <div>
-              {this.state.orders.map(item => {
-                return (
-                  <div className="d-flex all-orders">
-                    <div className="main-block m-4">
-                      <div className="wrapper-client text-white" key={item.id}>
-                        <div className="title text-center">DANE KLIENTA</div>
-                        <div className="test col  ml-auto">
-                          <div className="row mt-2">
-                            <p className="mr-auto">NAME: {item.name}</p>
-                            <p>HOUSE NUMBER: {item.houseNumber}</p>
-                          </div>
-                          <div className="row mt-2 ">
-                            <p className="mr-auto">
-                              ID NUMBER: {item.idNumber}
-                            </p>
-                            <p className="ml-3">STREET: {item.street}</p>
-                          </div>
-                          <div className="row mt-2 ">
-                            <p className="mr-auto">
-                              SPONSOR NAME: {item.sponsorName}
-                            </p>
-                            <p className="ml-3">CITY: {item.city}</p>
-                          </div>
-                          <div className="row mt-2 ">
-                            <p className="mr-auto">
-                              IDSPONSOR: {item.idSponsor}
-                            </p>
-                            <p className="ml-3">POST CODE: {item.postCode}</p>
-                          </div>
-                          <div className="row mt-2 ">
-                            <p className="mr-auto">EMAIL: {item.email}</p>
-                            <p className="ml-3">PHONE: {item.phone}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="wrapper-order">
-                        <div className="title text-center">ZAMOWIENIE</div>
-                        <p>zam1: {item.zam1}</p>
-                        <p>zam1.B {item.zam2}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        </div>
+          {this.state.orders.map(item => {
+            return (
+              <div className="card m-3">
+                <div className="card-header text-center">
+                  ZAMOWIENIE: {item.city}
+                </div>
+                <div className="card-body">
+                  <table className="table table-bordered">
+                    <thead className="thead-light" />
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <th>Otto</th>
+                        <td>@mdo</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table class="table table-bordered">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Handle</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
+        </main>
       </div>
     );
   }
