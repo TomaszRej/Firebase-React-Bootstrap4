@@ -61,6 +61,7 @@ class Home extends Component {
     const itemsRef = fire.database().ref("orders");
     itemsRef.on("value", snapshot => {
       let items = snapshot.val();
+      var x = 0;
       console.log("-------------");
       //console.log(items);
       let newState = [];
@@ -70,19 +71,21 @@ class Home extends Component {
           //console.log(items[item][inside]);
           for (let i in items[item][inside]) {
             //console.log(i);
+            var x = x + 1;
 
             newState.push({
               city: items[item][inside].city
             });
             console.log("/////////////");
             console.log(items[item][inside].city);
-            console.log("/////////////");
+            console.log("x" + x);
           }
-          this.setState({
-            orders: newState
-          });
         }
+        this.setState({
+          orders: newState
+        });
       }
+      //}
       /*for (let item in items) {
         newState.push({
           id: item,
@@ -148,7 +151,7 @@ class Home extends Component {
           {this.state.orders.map(item => {
             return (
               <div className="card m-3">
-                <div className="card-header text-center">
+                <div className="card-header text-center table-card-orders">
                   ZAMOWIENIE: {item.city}
                 </div>
                 <div className="card-body">
@@ -156,53 +159,69 @@ class Home extends Component {
                     <thead className="thead-light" />
                     <tbody>
                       <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <th>Otto</th>
-                        <td>@mdo</td>
+                        <th scope="row">Imie:</th>
+                        <td>imie</td>
+                        <th>Numer domu:</th>
+                        <td>house number</td>
                       </tr>
                       <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
+                        <th scope="row">Numer id:</th>
+                        <td>numer id</td>
+                        <th>Ulica:</th>
+                        <td>street</td>
                       </tr>
                       <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
+                        <th scope="row">Imie sponosora:</th>
+                        <td>imie sponsira</td>
+                        <th>Miasto:</th>
+                        <td>miasto</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Id sponosora:</th>
+                        <td>sponsor id</td>
+                        <th>Kod pocztowy:</th>
+                        <td>psot kod</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">E-mail:</th>
+                        <td>email</td>
+                        <th>Nr tel.:</th>
+                        <td>phone</td>
                       </tr>
                     </tbody>
                   </table>
 
-                  <table class="table table-bordered">
-                    <thead class="thead-light">
+                  <table className="table table-bordered">
+                    <thead className="thead-light ">
                       <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                        <th className="table-header-orders" scope="col">
+                          Lp:
+                        </th>
+                        <th className="table-header-orders" scope="col">
+                          Numer Produktu
+                        </th>
+                        <th className="table-header-orders" scope="col">
+                          Ilość
+                        </th>
+                        <th className="table-header-orders" scope="col">
+                          Nazwa Produktu
+                        </th>
+                        <th className="table-header-orders" scope="col">
+                          Punkty
+                        </th>
+                        <th className="table-header-orders" scope="col">
+                          Cena Dystrybutora
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
+                        <td>numer</td>
+                        <td>ilosc</td>
+                        <td>nazwa</td>
+                        <td>punkty</td>
+                        <td>cena</td>
                       </tr>
                     </tbody>
                   </table>

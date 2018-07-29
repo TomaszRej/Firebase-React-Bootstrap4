@@ -8,6 +8,14 @@ body {
   height: 100%;
   width: 100%;
 }
+.table-header-orders {
+  background-color: #90caf9 !important;
+  color: black !important;
+}
+.table-card-orders {
+  background-color: #42a5f5 !important;
+  color: black !important;
+}
 .button {
   flex-direction: column;
   justify-content: end;
