@@ -6,7 +6,9 @@ class Home extends Component {
     super(props);
     this.logout = this.logout.bind(this);
     this.state = {
-      orders: []
+      client: [],
+      orders: [],
+      info: []
     };
   }
 
@@ -19,64 +21,98 @@ class Home extends Component {
       //console.log(items);
       let orders = [];
       let order = {};
+      let client = [];
+      let info = [];
       var date = [];
       for (let item in items) {
-        //console.log(items[item]);
-        //if (items[item] === "DANE_KLIENTA") {
         for (let inside in items[item]) {
-          // console.log(items[item][inside]);
-          //console.log("ttututuututututu");
-          if (inside === "TIMESTAMP") {
-            //console.log("timestamp");
-            //order.timestamp = items[item][inside];
-            order.timestamp = items[item][inside];
+          //console.log(inside);
+          if (inside === "DANE_KLIENTA") {
+            //console.log(items[item][inside].name);
+            client.push({
+              name: items[item][inside].name,
+              idNumber: items[item][inside].idNumber,
+              sponsorName: items[item][inside].sponsorName,
+              idSponsor: items[item][inside].idSponsor,
+              email: items[item][inside].email
+            });
           }
+
+          if (inside === "TIMESTAMP") {
+            info.push({
+              timestamp: items[item][inside]
+            });
+          }
+
+          if (inside === "ZAMOWIENIE") {
+            for (let quantity in items[item][inside]) {
+              for (let products in items[item][inside][quantity]) {
+                //console.log(items[item][inside][quantity].A);
+                orders.push({
+                  A: items[item][inside][quantity].A,
+                  B: items[item][inside][quantity].B,
+                  C: items[item][inside][quantity].C,
+                  D: items[item][inside][quantity].D,
+                  E: items[item][inside][quantity].E
+                });
+
+                //console.log(items[item][inside][quantity][products]);
+              }
+            }
+          }
+
+          //console.log("ttututuututututu");
+          // if (inside === "TIMESTAMP") {
+          //   //console.log("timestamp");
+          //   //order.timestamp = items[item][inside];
+          //   order.timestamp = items[item][inside];
+          // }
 
           //order.name =
 
-          if (inside === "DANE_KLIENTA") {
-            for (let i in items[item][inside]) {
-              //console.log(items[item][inside][i]);
-              // console.log(i);
-              // console.log("iiiiiiii");
-
-              order[i] = items[item][inside][i];
-              // console.log(order[i]);
-              // console.log("________");
-            }
-          }
-          if (inside === "ZAMOWIENIE") {
-            for (let i in items[item][inside]) {
-              //console.log(items[item][inside][i]);
-              // console.log(i);
-              for (let product in items[item][inside][i]) {
-                order[product] = items[item][inside][i][product];
-              }
-              // console.log("iiiiiiii");
-              //order[i] = items[item][inside][i];
-              // console.log(order[i]);
-              // console.log("________");
-            }
-          }
+          // if (inside === "DANE_KLIENTA") {
+          //   for (let i in items[item][inside]) {
+          //     //console.log(items[item][inside][i]);
+          //     // console.log(i);
+          //     //console.log("iiiiiiii");
+          //     //client.push({});
+          //     //order[i] = items[item][inside][i];
+          //     // console.log(order[i]);
+          //     // console.log("________");
+          //   }
+          // }
+          // if (inside === "ZAMOWIENIE") {
+          //   for (let i in items[item][inside]) {
+          //     //console.log(items[item][inside][i]);
+          //     // console.log(i);
+          //     for (let product in items[item][inside][i]) {
+          //       order[product] = items[item][inside][i][product];
+          //     }
+          //     // console.log("iiiiiiii");
+          //     //order[i] = items[item][inside][i];
+          //     // console.log(order[i]);
+          //     // console.log("________");
+          //   }
+          // }
         }
-        //}
-        orders.push(order);
-        //console.log("aaaaaaaaaaaa");
-        console.log(this.state.orders);
-        this.setState({
-          orders: orders
-        });
       }
+      this.setState({
+        client: client
+      });
+      this.setState({
+        info: info
+      });
+      this.setState({
+        orders: orders
+      });
 
-      // this.setState({
-      //   orders: orders
-      // });
+      console.log(client);
+      console.log(info);
+      console.log(orders);
       // orders.push(order);
 
-      console.log(this.state.orders);
+      //console.log(this.state.orders);
     });
-
-    // console.log(orders);
   }
 
   logout() {
@@ -91,11 +127,13 @@ class Home extends Component {
             Logout
           </button>
 
-          {this.state.orders.map(item => {
+          {this.state.client.map(item => {
             return (
               <div className="card m-3">
                 <div className="card-header text-center table-card-orders">
-                  ZAMOWIENIE:{item.timestamp}
+                  {this.state.info.map(info => {
+                    return <div>ZAMOWIENIE:{info.timestamp}</div>;
+                  })}
                 </div>
                 <div className="card-body">
                   <table className="table table-bordered">
@@ -158,14 +196,18 @@ class Home extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>{item.A}</td>
-                        <td>ilosc</td>
-                        <td>{item.B}</td>
-                        <td>punkty</td>
-                        <td>cena</td>
-                      </tr>
+                      {this.state.orders.map(product => {
+                        return (
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>{product.A}</td>
+                            <td>{product.B}</td>
+                            <td>{product.C}</td>
+                            <td>{product.D}</td>
+                            <td>{product.E}</td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
