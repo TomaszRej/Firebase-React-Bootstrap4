@@ -15,68 +15,18 @@ class Home extends Component {
     itemsRef.on("value", snapshot => {
       let items = snapshot.val();
       var x = 0;
-      //console.log("-------------");
-      //console.log(items);
-      let orders = [];
-      let order = {};
-      var date = [];
-      for (let item in items) {
-        //console.log(items[item]);
-        //if (items[item] === "DANE_KLIENTA") {
-        for (let inside in items[item]) {
-          // console.log(items[item][inside]);
-          //console.log("ttututuututututu");
-          if (inside === "TIMESTAMP") {
-            //console.log("timestamp");
-            //order.timestamp = items[item][inside];
-            order.timestamp = items[item][inside];
-          }
+      let orders = Object.keys(items).map(i => items[i]);
+      console.log(orders);
+    
+      this.setState({
+        orders: orders
+      })
 
-          //order.name =
-
-          if (inside === "DANE_KLIENTA") {
-            for (let i in items[item][inside]) {
-              //console.log(items[item][inside][i]);
-              // console.log(i);
-              // console.log("iiiiiiii");
-
-              order[i] = items[item][inside][i];
-              // console.log(order[i]);
-              // console.log("________");
-            }
-          }
-          if (inside === "ZAMOWIENIE") {
-            for (let i in items[item][inside]) {
-              //console.log(items[item][inside][i]);
-              // console.log(i);
-              for (let product in items[item][inside][i]) {
-                order[product] = items[item][inside][i][product];
-              }
-              // console.log("iiiiiiii");
-              //order[i] = items[item][inside][i];
-              // console.log(order[i]);
-              // console.log("________");
-            }
-          }
-        }
-        //}
-        orders.push(order);
-        //console.log("aaaaaaaaaaaa");
-        console.log(this.state.orders);
-        this.setState({
-          orders: orders
-        });
-      }
-
-      // this.setState({
-      //   orders: orders
-      // });
-      // orders.push(order);
 
       console.log(this.state.orders);
     });
 
-    // console.log(orders);
+   
   }
 
   logout() {
@@ -92,10 +42,11 @@ class Home extends Component {
           </button>
 
           {this.state.orders.map(item => {
+            console.log('item MAP', item);
             return (
               <div className="card m-3">
                 <div className="card-header text-center table-card-orders">
-                  ZAMOWIENIE:{item.timestamp}
+                  ZAMOWIENIE:{item.DANE_KLIENTA.name}
                 </div>
                 <div className="card-body">
                   <table className="table table-bordered">
@@ -103,33 +54,33 @@ class Home extends Component {
                     <tbody>
                       <tr>
                         <th scope="row">Imie:</th>
-                        <td>{item.name}</td>
+                        <td>{item.DANE_KLIENTA.name}</td>
                         <th>Numer domu:</th>
-                        <td>{item.houseNumber}</td>
+                        <td>{item.DANE_KLIENTA.houseNumber}</td>
                       </tr>
                       <tr>
                         <th scope="row">Numer id:</th>
-                        <td>{item.idNumber}</td>
+                        <td>{item.DANE_KLIENTA.idNumber}</td>
                         <th>Ulica:</th>
-                        <td>{item.street}</td>
+                        <td>{item.DANE_KLIENTA.street}</td>
                       </tr>
                       <tr>
                         <th scope="row">Imie sponosora:</th>
-                        <td>{item.sponsorName}</td>
+                        <td>{item.DANE_KLIENTA.sponsorName}</td>
                         <th>Miasto:</th>
-                        <td>{item.city}</td>
+                        <td>{item.DANE_KLIENTA.city}</td>
                       </tr>
                       <tr>
                         <th scope="row">Id sponosora:</th>
-                        <td>{item.idSponsor}</td>
+                        <td>{item.DANE_KLIENTA.idSponsor}</td>
                         <th>Kod pocztowy:</th>
-                        <td>{item.postCode}</td>
+                        <td>{item.DANE_KLIENTA.postCode}</td>
                       </tr>
                       <tr>
                         <th scope="row">E-mail:</th>
-                        <td>{item.email}</td>
+                        <td>{item.DANE_KLIENTA.email}</td>
                         <th>Nr tel.:</th>
-                        <td>{item.phone}</td>
+                        <td>{item.DANE_KLIENTA.phone}</td>
                       </tr>
                     </tbody>
                   </table>
