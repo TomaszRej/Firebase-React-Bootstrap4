@@ -14,12 +14,28 @@ class Home extends Component {
     const itemsRef = fire.database().ref("orders");
     itemsRef.on("value", snapshot => {
       let items = snapshot.val();
+<<<<<<< HEAD
       let orders = Object.keys(items).map(i => items[i]);
 
       this.setState({
         orders: orders
       });
     });
+=======
+      var x = 0;
+      let orders = Object.keys(items).map(i => items[i]);
+      console.log(orders);
+    
+      this.setState({
+        orders: orders
+      })
+
+
+      console.log(this.state.orders);
+    });
+
+   
+>>>>>>> 763401491286ef5c6a7b5c22219985c30aa3acd5
   }
 
   logout() {
@@ -35,12 +51,20 @@ class Home extends Component {
             Logout
           </button>
           {this.state.orders.map(item => {
+<<<<<<< HEAD
             let lineNo = 0;
             product++;
             return (
               <div className="card m-3">
                 <div className="card-header text-center table-card-orders">
                   ZAMOWIENIE: {item.TIMESTAMP}
+=======
+            console.log('item MAP', item);
+            return (
+              <div className="card m-3">
+                <div className="card-header text-center table-card-orders">
+                  ZAMOWIENIE:{item.DANE_KLIENTA.name}
+>>>>>>> 763401491286ef5c6a7b5c22219985c30aa3acd5
                 </div>
                 <div className="card-body">
                   <table className="table table-bordered">
