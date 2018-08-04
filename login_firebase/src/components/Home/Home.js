@@ -14,19 +14,13 @@ class Home extends Component {
     const itemsRef = fire.database().ref("orders");
     itemsRef.on("value", snapshot => {
       let items = snapshot.val();
-      var x = 0;
       let orders = Object.keys(items).map(i => items[i]);
-      console.log(orders);
-    
+
       this.setState({
         orders: orders
-      })
-
-
-      console.log(this.state.orders);
+      });
     });
 
-   
   }
 
   logout() {
@@ -34,19 +28,21 @@ class Home extends Component {
   }
 
   render() {
+    let product = -1;
     return (
       <div>
         <main className="container">
           <button onClick={this.logout} className="btn btn-success btn-lg ml-3">
             Logout
           </button>
-
           {this.state.orders.map(item => {
-            console.log('item MAP', item);
+            let lineNo = 0;
+            product++;
             return (
               <div className="card m-3">
                 <div className="card-header text-center table-card-orders">
-                  ZAMOWIENIE:{item.TIMESTAMP}
+                  ZAMOWIENIE: {item.TIMESTAMP}
+                  ZAMOWIENIE:{item.DANE_KLIENTA.name}
                 </div>
                 <div className="card-body">
                   <table className="table table-bordered">
@@ -108,32 +104,22 @@ class Home extends Component {
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {item.ZAMOWIENIE.map((row, i) => {
-                        console.log('row',row);
 
-                      return(
-                        <tr>
-                            <th scope="row">{i + 1}</th>
-                            <td> {row.A}</td>
-                            <td> ilosc </td>
-                            <td> {row.B}</td>
-                            <td> {row.C} </td>
-                            <td> {row.D} </td>
-                            <td> {row.E}</td>
-                        </tr>
-                      )
-                        
-                      })}
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>{item.A}</td>
-                        <td>ilosc</td>
-                        <td>{item.B}</td>
-                        <td>punkty</td>
-                        <td>cena</td>
-                      </tr>
-                    </tbody>
+                    {this.state.orders[product].ZAMOWIENIE.map(y => {
+                      lineNo++;
+                      return (
+                        <tbody>
+                          <tr>
+                            <th scope="row">{lineNo}</th>
+                            <td>{y.A}</td>
+                            <td>{y.Q}</td>
+                            <td>{y.B}</td>
+                            <td>{y.E}</td>
+                            <td>{y.D}</td>
+                          </tr>
+                        </tbody>
+                      );
+                    })}
                   </table>
                 </div>
               </div>
