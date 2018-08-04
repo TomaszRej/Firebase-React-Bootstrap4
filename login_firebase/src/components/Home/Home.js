@@ -46,7 +46,7 @@ class Home extends Component {
             return (
               <div className="card m-3">
                 <div className="card-header text-center table-card-orders">
-                  ZAMOWIENIE:{item.DANE_KLIENTA.name}
+                  ZAMOWIENIE:{item.TIMESTAMP}
                 </div>
                 <div className="card-body">
                   <table className="table table-bordered">
@@ -109,6 +109,22 @@ class Home extends Component {
                       </tr>
                     </thead>
                     <tbody>
+                      {item.ZAMOWIENIE.map((row, i) => {
+                        console.log('row',row);
+
+                      return(
+                        <tr>
+                            <th scope="row">{i + 1}</th>
+                            <td> {row.A}</td>
+                            <td> ilosc </td>
+                            <td> {row.B}</td>
+                            <td> {row.C} </td>
+                            <td> {row.D} </td>
+                            <td> {row.E}</td>
+                        </tr>
+                      )
+                        
+                      })}
                       <tr>
                         <th scope="row">1</th>
                         <td>{item.A}</td>
