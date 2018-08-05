@@ -20,7 +20,6 @@ class Home extends Component {
         orders: orders
       });
     });
-
   }
 
   logout() {
@@ -42,7 +41,6 @@ class Home extends Component {
               <div className="card m-3">
                 <div className="card-header text-center table-card-orders">
                   ZAMOWIENIE: {item.TIMESTAMP}
-                  ZAMOWIENIE:{item.DANE_KLIENTA.name}
                 </div>
                 <div className="card-body">
                   <table className="table table-bordered">
@@ -115,7 +113,11 @@ class Home extends Component {
                             <td>{y.Q}</td>
                             <td>{y.B}</td>
                             <td>{y.E}</td>
-                            <td>{y.D}</td>
+                            {item.DANE_KLIENTA.sponsorName ? (
+                              <td>{y.D}</td>
+                            ) : (
+                              <td>{y.C}</td>
+                            )}
                           </tr>
                         </tbody>
                       );
