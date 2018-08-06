@@ -5,6 +5,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.logout = this.logout.bind(this);
+    this.search = this.search.bind(this);
     this.state = {
       orders: []
     };
@@ -22,6 +23,22 @@ class Home extends Component {
     });
   }
 
+  search(e) {
+    let input = e.target.value;
+
+    console.log(input);
+    let filteredOrders = [];
+    filteredOrders = this.state.orders.slice();
+    let temp = filteredOrders.filter(i => {
+      return i.DANE_KLIENTA.name === input;
+    });
+
+    console.log(temp);
+    console.log("temp w gore temp");
+
+    this.setState({ orders: temp });
+  }
+
   logout() {
     fire.auth().signOut();
   }
@@ -30,9 +47,22 @@ class Home extends Component {
     return (
       <div>
         <main className="container">
-          <button onClick={this.logout} className="btn btn-success btn-lg ml-3">
-            Logout
-          </button>
+          <section className="d-flex mt-3">
+            <button
+              onClick={this.logout}
+              className="btn btn-success btn-lg m-auto"
+            >
+              Logout
+            </button>
+            <div className="w-75 m-auto">
+              <input
+                onChange={this.search}
+                type="text"
+                className="form-control-lg"
+                placeholder="Wyszukaj"
+              />
+            </div>
+          </section>
           {this.state.orders.map((item, i) => {
             let timeStamp = item.TIMESTAMP.slice(0, 10);
 
@@ -163,7 +193,6 @@ class Home extends Component {
 
                     {this.state.orders[i].ZAMOWIENIE.map((y, lineNumber) => {
                       lineNumber++;
-                      console.log(i);
                       return (
                         <tbody key={lineNumber}>
                           <tr>
