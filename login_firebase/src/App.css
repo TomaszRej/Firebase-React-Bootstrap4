@@ -12,9 +12,17 @@ body {
   background-color: #90caf9 !important;
   color: black !important;
 }
+
 .table-card-orders {
   background-color: #42a5f5 !important;
   color: black !important;
+}
+
+.is-Distributor {
+  background-color: #26a69a !important;
+}
+.is-Distributor-light {
+  background-color: #80cbc4 !important;
 }
 .button {
   flex-direction: column;

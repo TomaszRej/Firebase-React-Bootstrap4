@@ -27,20 +27,23 @@ class Home extends Component {
   }
 
   render() {
-    let product = -1;
     return (
       <div>
         <main className="container">
           <button onClick={this.logout} className="btn btn-success btn-lg ml-3">
             Logout
           </button>
-          {this.state.orders.map(item => {
-            let lineNo = 0;
-            product++;
+          {this.state.orders.map((item, i) => {
+            let timeStamp = item.TIMESTAMP.slice(0, 10);
+
             return (
-              <div className="card m-3">
-                <div className="card-header text-center table-card-orders">
-                  ZAMOWIENIE: {item.TIMESTAMP}
+              <div key={i} className="card m-3">
+                <div
+                  className={`card-header text-center table-card-orders ${
+                    item.DANE_KLIENTA.idSponsor ? "is-Distributor" : ""
+                  }`}
+                >
+                  ZAMOWIENIE: {timeStamp}
                 </div>
                 <div className="card-body">
                   <table className="table table-bordered">
@@ -82,37 +85,94 @@ class Home extends Component {
                   <table className="table table-bordered">
                     <thead className="thead-light ">
                       <tr>
-                        <th className="table-header-orders" scope="col">
+                        <th
+                          className={`table-header-orders ${
+                            item.DANE_KLIENTA.idSponsor
+                              ? "is-Distributor-light"
+                              : ""
+                          }`}
+                          scope="col"
+                        >
                           Lp:
                         </th>
-                        <th className="table-header-orders" scope="col">
+                        <th
+                          className={`table-header-orders ${
+                            item.DANE_KLIENTA.idSponsor
+                              ? "is-Distributor-light"
+                              : ""
+                          }`}
+                          scope="col"
+                        >
                           Numer Produktu
                         </th>
-                        <th className="table-header-orders" scope="col">
+                        <th
+                          className={`table-header-orders ${
+                            item.DANE_KLIENTA.idSponsor
+                              ? "is-Distributor-light"
+                              : ""
+                          }`}
+                          scope="col"
+                        >
                           Ilość
                         </th>
-                        <th className="table-header-orders" scope="col">
+                        <th
+                          className={`table-header-orders ${
+                            item.DANE_KLIENTA.idSponsor
+                              ? "is-Distributor-light"
+                              : ""
+                          }`}
+                          scope="col"
+                        >
                           Nazwa Produktu
                         </th>
-                        <th className="table-header-orders" scope="col">
+                        <th
+                          className={`table-header-orders ${
+                            item.DANE_KLIENTA.idSponsor
+                              ? "is-Distributor-light"
+                              : ""
+                          }`}
+                          scope="col"
+                        >
                           Punkty
                         </th>
-                        <th className="table-header-orders" scope="col">
-                          Cena Dystrybutora
-                        </th>
+                        {item.DANE_KLIENTA.idSponsor ? (
+                          <th
+                            className={`table-header-orders ${
+                              item.DANE_KLIENTA.idSponsor
+                                ? "is-Distributor-light"
+                                : ""
+                            }`}
+                            scope="col"
+                          >
+                            Cena Dystrybutora
+                          </th>
+                        ) : (
+                          <th
+                            className={`table-header-orders ${
+                              item.DANE_KLIENTA.idSponsor
+                                ? "is-Distributor-light"
+                                : ""
+                            }`}
+                            scope="col"
+                          >
+                            Cena Katalogowa
+                          </th>
+                        )}
                       </tr>
                     </thead>
-                    {this.state.orders[product].ZAMOWIENIE.map(y => {
-                      lineNo++;
+
+                    {this.state.orders[i].ZAMOWIENIE.map((y, lineNumber) => {
+                      lineNumber++;
+                      console.log(i);
                       return (
-                        <tbody>
+                        <tbody key={lineNumber}>
                           <tr>
-                            <th scope="row">{lineNo}</th>
+                            <th scope="row">{lineNumber}</th>
                             <td>{y.A}</td>
                             <td>{y.Q}</td>
                             <td>{y.B}</td>
                             <td>{y.E}</td>
-                            {item.DANE_KLIENTA.sponsorName ? (
+                            {item.DANE_KLIENTA.idSponsor ? (
                               <td>{y.D}</td>
                             ) : (
                               <td>{y.C}</td>
