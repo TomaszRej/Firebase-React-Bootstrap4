@@ -172,7 +172,7 @@ class Home extends Component {
                             <td>{y.Q}</td>
                             <td>{y.B}</td>
                             <td>{y.E}</td>
-                            {item.DANE_KLIENTA.idSponsor ? (
+                            {item.DANE_KLIENTA.sponsorName ? (
                               <td>{y.D}</td>
                             ) : (
                               <td>{y.C}</td>
