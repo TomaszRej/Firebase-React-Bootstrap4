@@ -6,6 +6,7 @@ class Home extends Component {
     super(props);
     this.logout = this.logout.bind(this);
     this.search = this.search.bind(this);
+    this.clear = this.clear.bind(this);
     this.state = {
       orders: []
     };
@@ -15,7 +16,19 @@ class Home extends Component {
     const itemsRef = fire.database().ref("orders");
     itemsRef.on("value", snapshot => {
       let items = snapshot.val();
-      let orders = Object.keys(items).map(i => items[i]);
+      var orders = Object.keys(items).map(i => items[i]);
+
+      this.setState({
+        orders: orders
+      });
+    });
+  }
+
+  clear() {
+    const itemsRef = fire.database().ref("orders");
+    itemsRef.on("value", snapshot => {
+      let items = snapshot.val();
+      var orders = Object.keys(items).map(i => items[i]);
 
       this.setState({
         orders: orders
@@ -24,13 +37,15 @@ class Home extends Component {
   }
 
   search(e) {
-    let input = e.target.value;
+    let input = e.target.value.toLowerCase();
 
-    console.log(input);
-    let filteredOrders = [];
-    filteredOrders = this.state.orders.slice();
+    let filteredOrders = this.state.orders.slice();
+    console.log(filteredOrders);
     let temp = filteredOrders.filter(i => {
-      return i.DANE_KLIENTA.name === input;
+      return (
+        i.DANE_KLIENTA.name.toLowerCase().indexOf(input) > -1 ||
+        i.DANE_KLIENTA.idNumber.toLowerCase().indexOf(input) > -1
+      );
     });
 
     console.log(temp);
@@ -46,23 +61,27 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <main className="container">
-          <section className="d-flex mt-3">
+        <main className="container mt-3">
+          <div className="d-flex">
             <button
               onClick={this.logout}
               className="btn btn-success btn-lg m-auto"
             >
               Logout
             </button>
-            <div className="w-75 m-auto">
-              <input
-                onChange={this.search}
-                type="text"
-                className="form-control-lg"
-                placeholder="Wyszukaj"
-              />
-            </div>
-          </section>
+            <input
+              onChange={this.search}
+              type="text"
+              className="form-control-lg"
+              placeholder="Wyszukaj"
+            />
+            <button
+              onClick={this.clear}
+              className="btn btn-success btn-lg m-auto"
+            >
+              Skasuj filtry
+            </button>
+          </div>
           {this.state.orders.map((item, i) => {
             let timeStamp = item.TIMESTAMP.slice(0, 10);
 
