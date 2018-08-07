@@ -5,7 +5,9 @@ function searchingFor(filteredState) {
   return function(x) {
     return (
       x.DANE_KLIENTA.name.toLowerCase().includes(filteredState.toLowerCase()) ||
-      !filteredState
+      x.DANE_KLIENTA.idNumber
+        .toLowerCase()
+        .includes(filteredState.toLowerCase())
     );
   };
 }
@@ -55,7 +57,7 @@ class Home extends Component {
             </button>
             <input
               onChange={this.search}
-              value={this.state.filteredState}
+              // value={this.state.filteredState}
               type="text"
               className="form-control-lg"
               placeholder="Wyszukaj"
