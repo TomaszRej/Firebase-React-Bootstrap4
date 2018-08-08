@@ -17,6 +17,7 @@ class Home extends Component {
     super(props);
     this.logout = this.logout.bind(this);
     this.search = this.search.bind(this);
+    this.delete = this.delete.bind(this);
 
     this.state = {
       orders: [],
@@ -38,6 +39,16 @@ class Home extends Component {
 
   search(e) {
     this.setState({ filteredState: e.target.value });
+  }
+
+  delete(itemId, e) {
+    console.log(e);
+    console.log(itemId);
+    const itemRef = fire.database().ref(`/orders/${itemId}`);
+    //console.log(itemRef[itemId]);
+    
+    itemRef.remove();
+    console.log(itemRef);
   }
 
   logout() {
@@ -67,6 +78,7 @@ class Home extends Component {
             .filter(searchingFor(this.state.filteredState))
             .map((item, i) => {
               let timeStamp = item.TIMESTAMP.slice(0, 10);
+              console.log();
 
               return (
                 <div key={i} className="card m-3">
@@ -75,7 +87,13 @@ class Home extends Component {
                       item.DANE_KLIENTA.idSponsor ? "is-Distributor" : ""
                     }`}
                   >
-                    ZAMOWIENIE: {timeStamp}
+                    ZAMOWIENIE: {timeStamp}{" "}
+                    <button
+                      className="btn btn-danger btn-lg float-right"
+                      onClick={() => this.delete(i)}
+                    >
+                      X
+                    </button>
                   </div>
                   <div className="card-body">
                     <table className="table table-bordered">
