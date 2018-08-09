@@ -27,13 +27,31 @@ class Home extends Component {
 
   componentDidMount() {
     const itemsRef = fire.database().ref("orders");
+    // console.log(itemsRef.key);
+
+    //console.log(itemsRef.child("ZAMOWIENIE").key);
     itemsRef.on("value", snapshot => {
       let items = snapshot.val();
-      var orders = Object.keys(items).map(i => items[i]);
 
+      //var orders = Object.keys(items).map(i => items[i]);
+      let newState = [];
+      for (let item in items) {
+        // console.log(items[item]);
+        newState.push({
+          id: item,
+          DANE_KLIENTA: items[item].DANE_KLIENTA,
+          TIMESTAMP: items[item].TIMESTAMP,
+          ZAMOWIENIE: items[item].ZAMOWIENIE
+        });
+      }
       this.setState({
-        orders: orders
+        orders: newState
       });
+      console.log(this.state.orders);
+
+      // this.setState({
+      //   orders: orders
+      // });
     });
   }
 
@@ -44,11 +62,12 @@ class Home extends Component {
   delete(itemId, e) {
     console.log(e);
     console.log(itemId);
-    const itemRef = fire.database().ref(`/orders/${itemId}`);
+    //gdy dam na sztywno numer id to usuwa
+    //const itemRef = fire.database().ref(`/orders/-LIb-absg3ctSI2bFLWJ`);
     //console.log(itemRef[itemId]);
-    
+    const itemRef = fire.database().ref(`/orders/${itemId}`);
     itemRef.remove();
-    console.log(itemRef);
+    //console.log(itemRef);
   }
 
   logout() {
@@ -78,7 +97,7 @@ class Home extends Component {
             .filter(searchingFor(this.state.filteredState))
             .map((item, i) => {
               let timeStamp = item.TIMESTAMP.slice(0, 10);
-              console.log();
+              // console.log();
 
               return (
                 <div key={i} className="card m-3">
@@ -90,7 +109,7 @@ class Home extends Component {
                     ZAMOWIENIE: {timeStamp}{" "}
                     <button
                       className="btn btn-danger btn-lg float-right"
-                      onClick={() => this.delete(i)}
+                      onClick={() => this.delete(item.id)}
                     >
                       X
                     </button>
