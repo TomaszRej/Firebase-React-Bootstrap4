@@ -23,7 +23,7 @@ class Home extends Component {
     this.state = {
       orders: [],
       filteredState: "",
-      OrderChecked: {}
+      OrderChecked: []
     };
   }
 
@@ -67,14 +67,18 @@ class Home extends Component {
   }
 
   delete(e) {
+    let test = 0;
     let indexes = [];
     for (let ix in this.state.orders) {
       indexes[ix] = this.state.orders[ix].id;
-      if (this.state.OrderChecked[indexes[ix]] == true) {
+      if (this.state.OrderChecked[indexes[ix]] === true) {
         const itemRef = fire.database().ref(`/orders/${indexes[ix]}`);
-        itemRef.remove();
+        test++;
+        //wymutowane na czas zrobienia mnodala
+        // itemRef.remove();
       }
     }
+    console.log(test);
   }
 
   logout() {
@@ -92,12 +96,7 @@ class Home extends Component {
             >
               Logout
             </button>
-            <button
-              className="btn btn-danger btn-lg float-right"
-              onClick={() => this.delete()}
-            >
-              SKASUJ ZAZNACZONE!
-            </button>
+
             <input
               onChange={this.search}
               // value={this.state.filteredState}
@@ -106,9 +105,73 @@ class Home extends Component {
               placeholder="Wyszukaj"
             />
           </div>
+          <div>
+            <button
+              type="button"
+              className="btn btn-danger btn-lg"
+              data-toggle="modal"
+              data-target="#exampleModal"
+            >
+              Skasuj zaznaczone!
+            </button>
+
+            <div
+              className="modal fade"
+              id="exampleModal"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">
+                      Czy napewno chcesz skasować zaznaczone zamówienia ?
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  {this.state.OrderChecked.map((check, i) => {
+                    return (
+                      <div className="modal-body">
+                        ...
+                        {i}
+                        {check[i]}
+                      </div>
+                    );
+                  })}
+
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-dismiss="modal"
+                    >
+                      Anuluj
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => this.delete()}
+                      data-dismiss="modal"
+                    >
+                      Potwierdz
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           {this.state.orders
             .filter(searchingFor(this.state.filteredState))
-            .map((item, i, e) => {
+            .map((item, i) => {
               let timeStamp = item.TIMESTAMP.slice(0, 10);
               // console.log();
 
