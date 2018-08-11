@@ -18,10 +18,12 @@ class Home extends Component {
     this.logout = this.logout.bind(this);
     this.search = this.search.bind(this);
     this.delete = this.delete.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
 
     this.state = {
       orders: [],
-      filteredState: ""
+      filteredState: "",
+      OrderChecked: {}
     };
   }
 
@@ -47,11 +49,16 @@ class Home extends Component {
       this.setState({
         orders: newState
       });
-      console.log(this.state.orders);
+    });
+  }
 
-      // this.setState({
-      //   orders: orders
-      // });
+  handleCheck(item, e) {
+    let OrderChecked = this.state.OrderChecked;
+
+    OrderChecked[item.id] = e.target.checked;
+
+    this.setState({
+      OrderChecked: OrderChecked
     });
   }
 
@@ -59,15 +66,15 @@ class Home extends Component {
     this.setState({ filteredState: e.target.value });
   }
 
-  delete(itemId, e) {
-    console.log(e);
-    console.log(itemId);
-    //gdy dam na sztywno numer id to usuwa
-    //const itemRef = fire.database().ref(`/orders/-LIb-absg3ctSI2bFLWJ`);
-    //console.log(itemRef[itemId]);
-    const itemRef = fire.database().ref(`/orders/${itemId}`);
-    itemRef.remove();
-    //console.log(itemRef);
+  delete(e) {
+    let indexes = [];
+    for (let ix in this.state.orders) {
+      indexes[ix] = this.state.orders[ix].id;
+      if (this.state.OrderChecked[indexes[ix]] == true) {
+        const itemRef = fire.database().ref(`/orders/${indexes[ix]}`);
+        itemRef.remove();
+      }
+    }
   }
 
   logout() {
@@ -85,6 +92,12 @@ class Home extends Component {
             >
               Logout
             </button>
+            <button
+              className="btn btn-danger btn-lg float-right"
+              onClick={() => this.delete()}
+            >
+              SKASUJ ZAZNACZONE!
+            </button>
             <input
               onChange={this.search}
               // value={this.state.filteredState}
@@ -95,7 +108,7 @@ class Home extends Component {
           </div>
           {this.state.orders
             .filter(searchingFor(this.state.filteredState))
-            .map((item, i) => {
+            .map((item, i, e) => {
               let timeStamp = item.TIMESTAMP.slice(0, 10);
               // console.log();
 
@@ -107,12 +120,16 @@ class Home extends Component {
                     }`}
                   >
                     ZAMOWIENIE: {timeStamp}{" "}
-                    <button
-                      className="btn btn-danger btn-lg float-right"
-                      onClick={() => this.delete(item.id)}
-                    >
-                      X
-                    </button>
+                    <label className="form-check-label mr-2">
+                      <input
+                        type="checkbox"
+                        value="1"
+                        onChange={e => {
+                          this.handleCheck(item, e);
+                        }}
+                        className="form-check-input"
+                      />
+                    </label>
                   </div>
                   <div className="card-body">
                     <table className="table table-bordered">

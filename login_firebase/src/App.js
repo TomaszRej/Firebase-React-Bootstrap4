@@ -20,6 +20,7 @@ class App extends Component {
   authListener() {
     fire.auth().onAuthStateChanged(user => {
       if (user) {
+        console.lod(user);
         this.setState({ user });
       } else {
         this.setState({ user: null });
