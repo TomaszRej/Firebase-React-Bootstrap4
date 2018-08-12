@@ -32,7 +32,19 @@ body {
 .container-flow {
   flex-direction: column;
 }
+.check {
+  float: right;
+}
 
+.main {
+  background-image: url("tiande.jpg");
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-attachment: fixed;
+}
+.languageSwitcher {
+  float: right;
+}
 .login-container {
   color: white;
   height: 100%;

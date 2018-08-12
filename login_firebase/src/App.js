@@ -13,24 +13,22 @@ class App extends Component {
     this.authListener = this.authListener.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.authListener();
-  }
+  };
 
-  authListener() {
+  authListener = () => {
     fire.auth().onAuthStateChanged(user => {
       if (user) {
-        console.lod(user);
         this.setState({ user });
       } else {
         this.setState({ user: null });
       }
     });
-  }
-  render() {
-    //return <div className="App">{this.state.user ? <Home /> : <Login />}</div>;
+  };
+  render = () => {
     return <div>{this.state.user ? <Home /> : <Login />}</div>;
-  }
+  };
 }
 
 export default App;

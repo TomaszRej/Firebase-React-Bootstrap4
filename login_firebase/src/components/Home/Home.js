@@ -23,7 +23,7 @@ class Home extends Component {
     this.state = {
       orders: [],
       filteredState: "",
-      OrderChecked: []
+      OrderChecked: {}
     };
   }
 
@@ -74,6 +74,7 @@ class Home extends Component {
       if (this.state.OrderChecked[indexes[ix]] === true) {
         const itemRef = fire.database().ref(`/orders/${indexes[ix]}`);
         test++;
+
         //wymutowane na czas zrobienia mnodala
         // itemRef.remove();
       }
@@ -89,86 +90,87 @@ class Home extends Component {
     return (
       <div>
         <main className="container mt-3">
-          <div className="d-flex">
-            <button
-              onClick={this.logout}
-              className="btn btn-success btn-lg m-auto"
-            >
-              Logout
-            </button>
+          <div class="card m-3">
+            <div class="card-body">
+              {" "}
+              <div className="d-flex flex-column">
+                <button
+                  onClick={this.logout}
+                  className="btn btn-success btn-lg "
+                >
+                  Logout
+                </button>
 
-            <input
-              onChange={this.search}
-              // value={this.state.filteredState}
-              type="text"
-              className="form-control-lg"
-              placeholder="Wyszukaj"
-            />
-          </div>
-          <div>
-            <button
-              type="button"
-              className="btn btn-danger btn-lg"
-              data-toggle="modal"
-              data-target="#exampleModal"
-            >
-              Skasuj zaznaczone!
-            </button>
+                <input
+                  onChange={this.search}
+                  // value={this.state.filteredState}
+                  type="text"
+                  className="form-control-lg"
+                  placeholder="Wyszukaj"
+                />
+                <button
+                  type="button"
+                  className="btn btn-danger btn-lg"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                >
+                  Skasuj zaznaczone!
+                </button>
+              </div>
+              <div>
+                <div
+                  className="modal fade"
+                  id="exampleModal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          Czy napewno chcesz skasować zaznaczone zamówienia ?
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
 
-            <div
-              className="modal fade"
-              id="exampleModal"
-              tabindex="-1"
-              role="dialog"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
-            >
-              <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">
-                      Czy napewno chcesz skasować zaznaczone zamówienia ?
-                    </h5>
-                    <button
-                      type="button"
-                      className="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  {this.state.OrderChecked.map((check, i) => {
-                    return (
                       <div className="modal-body">
                         ...
-                        {i}
-                        {check[i]}
+                        {}
                       </div>
-                    );
-                  })}
 
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      data-dismiss="modal"
-                    >
-                      Anuluj
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => this.delete()}
-                      data-dismiss="modal"
-                    >
-                      Potwierdz
-                    </button>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          data-dismiss="modal"
+                        >
+                          Anuluj
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => this.delete()}
+                          data-dismiss="modal"
+                        >
+                          Potwierdz
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
           {this.state.orders
             .filter(searchingFor(this.state.filteredState))
             .map((item, i) => {
@@ -183,7 +185,7 @@ class Home extends Component {
                     }`}
                   >
                     ZAMOWIENIE: {timeStamp}{" "}
-                    <label className="form-check-label mr-2">
+                    <div className="check">
                       <input
                         type="checkbox"
                         value="1"
@@ -192,7 +194,7 @@ class Home extends Component {
                         }}
                         className="form-check-input"
                       />
-                    </label>
+                    </div>
                   </div>
                   <div className="card-body">
                     <table className="table table-bordered">
