@@ -19,10 +19,12 @@ class Home extends Component {
     this.search = this.search.bind(this);
     this.delete = this.delete.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
+    this.checkAll = this.checkAll.bind(this);
 
     this.state = {
       orders: [],
       filteredState: "",
+      howManyToDelete: 0,
       OrderChecked: {}
     };
   }
@@ -36,10 +38,10 @@ class Home extends Component {
       let items = snapshot.val();
 
       //var orders = Object.keys(items).map(i => items[i]);
-      let newState = [];
+      let orders = [];
       for (let item in items) {
         // console.log(items[item]);
-        newState.push({
+        orders.push({
           id: item,
           DANE_KLIENTA: items[item].DANE_KLIENTA,
           TIMESTAMP: items[item].TIMESTAMP,
@@ -47,26 +49,62 @@ class Home extends Component {
         });
       }
       this.setState({
-        orders: newState
+        orders: orders
       });
     });
   }
 
   handleCheck(item, e) {
     let OrderChecked = this.state.OrderChecked;
-
     OrderChecked[item.id] = e.target.checked;
 
     this.setState({
       OrderChecked: OrderChecked
     });
+
+    if (OrderChecked[item.id] === true) {
+      this.setState({
+        howManyToDelete: this.state.howManyToDelete + 1
+      });
+    } else {
+      this.setState({
+        howManyToDelete: this.state.howManyToDelete - 1
+      });
+    }
   }
 
-  search(e) {
-    this.setState({ filteredState: e.target.value });
+  checkAll() {
+    let indexes = [];
+    let inverted = [];
+    for (let ix in this.state.orders) {
+      indexes[ix] = this.state.orders[ix].id;
+      inverted[ix] = !this.state.OrderChecked[indexes[ix]];
+      console.log(inverted[ix]);
+
+      //wymutowane na czas zrobienia mnodala
+      // itemRef.remove();
+    }
+
+    this.setState({
+      OrderChecked: inverted
+    });
+
+    console.log(inverted);
+    for (let x in this.state.OrderChecked) {
+      console.log(this.state.OrderChecked[x]);
+      console.log("w ordered chcecked");
+    }
+    //console.log(this.state.OrderChecked);
+
+    // console.log(test);
+    // console.log("ZAZNACZ WSZYSTKO");
+    // let opositeCheck = this.state.OrderChecked;
+    // for (let x in this.state.OrderChecked) {
+    //   opositeCheck[x] = !this.state.OrderChecked[x];
+    // }
   }
 
-  delete(e) {
+  delete() {
     let test = 0;
     let indexes = [];
     for (let ix in this.state.orders) {
@@ -79,7 +117,16 @@ class Home extends Component {
         // itemRef.remove();
       }
     }
-    console.log(test);
+    this.setState({
+      howManyToDelete: test
+    });
+
+    console.log(this.state.howManyToDelete);
+    console.log("ile skasowac ze state howmany");
+  }
+
+  search(e) {
+    this.setState({ filteredState: e.target.value });
   }
 
   logout() {
@@ -90,79 +137,83 @@ class Home extends Component {
     return (
       <div>
         <main className="container mt-3">
-          <div class="card m-3">
-            <div class="card-body">
-              {" "}
-              <div className="d-flex flex-column">
-                <button
-                  onClick={this.logout}
-                  className="btn btn-success btn-lg "
-                >
-                  Logout
-                </button>
+          <div id="header">
+            <button onClick={this.logout} className="btn btn-success btn-lg ">
+              Logout
+            </button>
+            <div class="card m-3">
+              <div class="card-body">
+                {" "}
+                <div className="d-flex flex-column">
+                  <input
+                    onChange={this.search}
+                    // value={this.state.filteredState}
+                    type="text"
+                    className="form-control-lg"
+                    placeholder="Wyszukaj"
+                  />
+                  <button
+                    className="btn btn-info btn-lg"
+                    onClick={this.checkAll}
+                  >
+                    Zaznacz wszystko
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-lg"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                  >
+                    Skasuj zaznaczone!
+                  </button>
+                </div>
+                <div>
+                  <div
+                    className="modal fade"
+                    id="exampleModal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">
+                            Czy napewno chcesz skasować zaznaczone zamówienia ?
+                          </h5>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
 
-                <input
-                  onChange={this.search}
-                  // value={this.state.filteredState}
-                  type="text"
-                  className="form-control-lg"
-                  placeholder="Wyszukaj"
-                />
-                <button
-                  type="button"
-                  className="btn btn-danger btn-lg"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                >
-                  Skasuj zaznaczone!
-                </button>
-              </div>
-              <div>
-                <div
-                  className="modal fade"
-                  id="exampleModal"
-                  tabindex="-1"
-                  role="dialog"
-                  aria-labelledby="exampleModalLabel"
-                  aria-hidden="true"
-                >
-                  <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">
-                          Czy napewno chcesz skasować zaznaczone zamówienia ?
-                        </h5>
-                        <button
-                          type="button"
-                          className="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
+                        <div className="modal-body">
+                          Ilość zaznaczonych zamówień:{" "}
+                          {this.state.howManyToDelete}
+                        </div>
 
-                      <div className="modal-body">
-                        ...
-                        {}
-                      </div>
-
-                      <div className="modal-footer">
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-dismiss="modal"
-                        >
-                          Anuluj
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={() => this.delete()}
-                          data-dismiss="modal"
-                        >
-                          Potwierdz
-                        </button>
+                        <div className="modal-footer">
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            Anuluj
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() => this.delete()}
+                            data-dismiss="modal"
+                          >
+                            Potwierdz
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -187,8 +238,8 @@ class Home extends Component {
                     ZAMOWIENIE: {timeStamp}{" "}
                     <div className="check">
                       <input
+                        defaultChecked={this.state.inverted}
                         type="checkbox"
-                        value="1"
                         onChange={e => {
                           this.handleCheck(item, e);
                         }}
@@ -197,7 +248,7 @@ class Home extends Component {
                     </div>
                   </div>
                   <div className="card-body">
-                    <table className="table table-bordered">
+                    <table className="table-sm table-bordered mb-3">
                       <thead className="thead-light" />
                       <tbody>
                         <tr>
@@ -233,7 +284,7 @@ class Home extends Component {
                       </tbody>
                     </table>
 
-                    <table className="table table-bordered">
+                    <table className="table-sm table-bordered">
                       <thead className="thead-light ">
                         <tr>
                           <th
