@@ -19,12 +19,13 @@ class Home extends Component {
     this.search = this.search.bind(this);
     this.delete = this.delete.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
-    this.checkAll = this.checkAll.bind(this);
+    this.invertAll = this.invertAll.bind(this);
 
     this.state = {
       orders: [],
       filteredState: "",
       howManyToDelete: 0,
+      groupCheck: false,
       OrderChecked: {}
     };
   }
@@ -55,11 +56,14 @@ class Home extends Component {
   }
 
   handleCheck(item, e) {
+    console.log(e.target.checked);
     let OrderChecked = this.state.OrderChecked;
+
     OrderChecked[item.id] = e.target.checked;
 
     this.setState({
       OrderChecked: OrderChecked
+      //groupCheck: this.state.groupCheck
     });
 
     if (OrderChecked[item.id] === true) {
@@ -73,28 +77,24 @@ class Home extends Component {
     }
   }
 
-  checkAll() {
+  invertAll() {
     let indexes = [];
     let inverted = [];
     for (let ix in this.state.orders) {
       indexes[ix] = this.state.orders[ix].id;
       inverted[ix] = !this.state.OrderChecked[indexes[ix]];
       console.log(inverted[ix]);
-
-      //wymutowane na czas zrobienia mnodala
-      // itemRef.remove();
     }
 
     this.setState({
-      OrderChecked: inverted
+      OrderChecked: inverted,
+      groupCheck: !this.state.groupCheck
     });
 
-    console.log(inverted);
     for (let x in this.state.OrderChecked) {
       console.log(this.state.OrderChecked[x]);
       console.log("w ordered chcecked");
     }
-    //console.log(this.state.OrderChecked);
 
     // console.log(test);
     // console.log("ZAZNACZ WSZYSTKO");
@@ -154,7 +154,7 @@ class Home extends Component {
                   />
                   <button
                     className="btn btn-info btn-lg"
-                    onClick={this.checkAll}
+                    onClick={this.invertAll}
                   >
                     Zaznacz wszystko
                   </button>
@@ -171,7 +171,7 @@ class Home extends Component {
                   <div
                     className="modal fade"
                     id="exampleModal"
-                    tabindex="-1"
+                    tableindex="-1"
                     role="dialog"
                     aria-labelledby="exampleModalLabel"
                     aria-hidden="true"
@@ -237,14 +237,25 @@ class Home extends Component {
                   >
                     ZAMOWIENIE: {timeStamp}{" "}
                     <div className="check">
-                      <input
-                        defaultChecked={this.state.inverted}
-                        type="checkbox"
-                        onChange={e => {
-                          this.handleCheck(item, e);
-                        }}
-                        className="form-check-input"
-                      />
+                      {this.state.groupCheck ? (
+                        <input
+                          checked={!this.state.OrderChecked.i}
+                          type="checkbox"
+                          onChange={e => {
+                            this.handleCheck(item, e);
+                          }}
+                          className="form-check-input"
+                        />
+                      ) : (
+                        <input
+                          checked={this.state.OrderChecked.i}
+                          type="checkbox"
+                          onChange={e => {
+                            this.handleCheck(item, e);
+                          }}
+                          className="form-check-input"
+                        />
+                      )}
                     </div>
                   </div>
                   <div className="card-body">
