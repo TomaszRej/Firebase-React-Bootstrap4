@@ -24,9 +24,8 @@ class Home extends Component {
     this.state = {
       orders: [],
       filteredState: "",
-      howManyToDelete: 5,
+      howManyToDelete: 0,
       groupCheck: false,
-      //OrderChecked: [true, false, true]
       OrderChecked: []
     };
   }
@@ -57,12 +56,11 @@ class Home extends Component {
   }
 
   handleCheck(item, e) {
+    let howManyToDelete = 0;
     let OrderChecked = this.state.OrderChecked;
     //OrderChecked[item.id] = e.target.checked;
     let temp = e.target.checked;
-
     //console.log(item.id + "+" + OrderChecked[item.id]);
-
     for (let orderId in this.state.orders) {
       OrderChecked[orderId] = this.state.OrderChecked[orderId];
       if (this.state.OrderChecked[orderId] === undefined) {
@@ -71,96 +69,51 @@ class Home extends Component {
       if (item.id === this.state.orders[orderId].id) {
         OrderChecked[orderId] = temp;
       }
-      // console.log(this.state.orders[orderId].id);
-      // console.log("id zamowienia ? x3");
-      // console.log(item.id);
-      // if (item.id === this.state.orders[orderId].id) {
-      //   OrderChecked[item.id] = temp;
-      //   console.log();
-      //   console.log("do pprzypisania temp");
-      // }
+      if (OrderChecked[orderId] === true) {
+        howManyToDelete++;
+      }
     }
 
     this.setState({
-      OrderChecked: OrderChecked
+      OrderChecked: OrderChecked,
+      howManyToDelete: howManyToDelete
       //groupCheck: this.state.groupCheck
     });
+    // console.log(howManyToDelete);
+    // console.log("how many z handlecheck");
+    // console.log(OrderChecked);
+    // console.log("ma byc tablica tyle el. typu boolean ile orders");
 
-    console.log(OrderChecked);
-    console.log("ma byc tablica tyle el. typu boolean ile orders");
-
-    // if (OrderChecked[item.id] === true) {
-    //   this.setState({
-    //     howManyToDelete: this.state.howManyToDelete + 1
-    //   });
-    // } else {
-    //   this.setState({
-    //     howManyToDelete: this.state.howManyToDelete - 1
-    //   });
-    // }
   }
 
   invertAll() {
+    let howManyToDelete = 0;
     let OrderChecked = this.state.OrderChecked;
     let orders = this.state.orders;
     for (let order in orders) {
-      console.log(orders[order].id);
+      console.log(OrderChecked[order]);
+      if (OrderChecked[order] === true) {
+        howManyToDelete++;
+      }
+      //console.log(orders[order].id);
+
       OrderChecked[order] = !this.state.OrderChecked[order];
     }
 
     this.setState({
-      OrderChecked: OrderChecked
-      //groupCheck: this.state.groupCheck
+      OrderChecked: OrderChecked,
+      howManyToDelete: howManyToDelete
     });
 
-    console.log(OrderChecked);
-    console.log("ma byc tablica z ODWROCONYMI wartosciami");
+    // console.log("do kasacji " + this.state.howManyToDelete);
+    // console.log(OrderChecked);
+    // console.log("ma byc tablica z ODWROCONYMI wartosciami");
 
-    //dd
-    // let indexes = [];
-    // let inverted = [];
-    // for (let ix in this.state.orders) {
-    //   indexes[ix] = this.state.orders[ix].id;
-    //   inverted[ix] = !this.state.OrderChecked[indexes[ix]];
-    //   console.log(inverted[ix]);
-    // }
 
-    // this.setState({
-    //   OrderChecked: inverted,
-    //   groupCheck: !this.state.groupCheck
-    // });
 
-    // for (let x in this.state.OrderChecked) {
-    //   console.log(this.state.OrderChecked[x]);
-    //   console.log("w ordered chcecked");
-    // }
-
-    //dd
-
-    // console.log(test);
-    // console.log("ZAZNACZ WSZYSTKO");
-    // let opositeCheck = this.state.OrderChecked;
-    // for (let x in this.state.OrderChecked) {
-    //   opositeCheck[x] = !this.state.OrderChecked[x];
-    // }
   }
 
   delete() {
-    // let test = 0;
-    // let indexes = [];
-    // for (let ix in this.state.orders) {
-    //   indexes[ix] = this.state.orders[ix].id;
-    //   console.log();
-    //   if (this.state.OrderChecked[indexes[ix]] === true) {
-    //     console.log("doskasowania");
-    //     const itemRef = fire.database().ref(`/orders/${indexes[ix]}`);
-    //     test++;
-
-    //     //wymutowane na czas zrobienia mnodala
-    //     // itemRef.remove();
-    //   }
-    // }
-    let howManyToDelete = 0;
     let OrderChecked = this.state.OrderChecked;
     let orders = this.state.orders;
     for (let order in orders) {
@@ -169,16 +122,10 @@ class Home extends Component {
       console.log(OrderChecked[order]);
       console.log("szukam boolean");
       if (OrderChecked[order] === true) {
-        howManyToDelete++;
         const itemRef = fire.database().ref(`/orders/${orders[order].id}`);
         //itemRef.remove();
       }
     }
-// musi byc w innym miejscu w kodzie tu juz za pozno
-    this.setState({ howManyToDelete: howManyToDelete });
-
-    console.log(this.state.howManyToDelete);
-    console.log("ile skasowac ze state howmany");
   }
 
   search(e) {
@@ -293,25 +240,14 @@ class Home extends Component {
                   >
                     ZAMOWIENIE: {timeStamp}{" "}
                     <div className="check">
-                      {this.state.groupCheck ? (
-                        <input
-                          checked={!this.state.OrderChecked[i]}
-                          type="checkbox"
-                          onChange={e => {
-                            this.handleCheck(item, e);
-                          }}
-                          className="form-check-input"
-                        />
-                      ) : (
-                        <input
-                          checked={this.state.OrderChecked[i]}
-                          type="checkbox"
-                          onChange={e => {
-                            this.handleCheck(item, e);
-                          }}
-                          className="form-check-input"
-                        />
-                      )}
+                      <input
+                        checked={this.state.OrderChecked[i]}
+                        type="checkbox"
+                        onChange={e => {
+                          this.handleCheck(item, e);
+                        }}
+                        className="form-check-input"
+                      />
                     </div>
                   </div>
                   <div className="card-body">
