@@ -1,5 +1,10 @@
 import React, { Component } from "react";
+import TransitionGroup from "react-transition-group/TransitionGroup";
+import CSSTransition from "react-transition-group/CSSTransition";
 import fire from "../../config/Fire";
+import Logout from "../Logout/Logout";
+import MiniMenu from "../MiniMenu/MiniMenu";
+//import OrderContent from "../OrderContent/OrderContent";
 
 function searchingFor(filteredState) {
   return function(x) {
@@ -20,28 +25,24 @@ class Home extends Component {
     this.delete = this.delete.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
     this.invertAll = this.invertAll.bind(this);
+    this.showOrder = this.showOrder.bind(this);
 
     this.state = {
       orders: [],
       filteredState: "",
       howManyToDelete: 0,
-      groupCheck: false,
-      OrderChecked: []
+      OrderChecked: [],
+      showOrder: false
     };
   }
 
   componentDidMount() {
     const itemsRef = fire.database().ref("orders");
-    // console.log(itemsRef.key);
 
-    //console.log(itemsRef.child("ZAMOWIENIE").key);
     itemsRef.on("value", snapshot => {
       let items = snapshot.val();
-
-      //var orders = Object.keys(items).map(i => items[i]);
       let orders = [];
       for (let item in items) {
-        // console.log(items[item]);
         orders.push({
           id: item,
           DANE_KLIENTA: items[item].DANE_KLIENTA,
@@ -49,10 +50,40 @@ class Home extends Component {
           ZAMOWIENIE: items[item].ZAMOWIENIE
         });
       }
+
       this.setState({
         orders: orders
       });
     });
+  }
+
+  showOrder(item, i) {
+    let showOrder = [];
+    for (let orderId in this.state.orders) {
+      console.log(orderId);
+      if (showOrder[orderId] === undefined) {
+        showOrder[orderId] = false;
+      } else {
+        showOrder[orderId] = showOrder[orderId];
+      }
+    }
+
+    for (let orderId in this.state.orders) {
+      // dla wszystkich zamowien
+      console.log(this.state.orders[orderId]);
+      if (item.id === this.state.orders[orderId].id) {
+        showOrder[orderId] = !this.state.showOrder[orderId];
+      } else {
+        showOrder[orderId] = this.state.showOrder[orderId];
+      }
+    }
+
+    this.setState({
+      showOrder: showOrder
+    });
+
+    console.log(this.state.showOrder);
+    console.log("SHOWORDER");
   }
 
   handleCheck(item, e) {
@@ -77,13 +108,7 @@ class Home extends Component {
     this.setState({
       OrderChecked: OrderChecked,
       howManyToDelete: howManyToDelete
-      //groupCheck: this.state.groupCheck
     });
-    // console.log(howManyToDelete);
-    // console.log("how many z handlecheck");
-    // console.log(OrderChecked);
-    // console.log("ma byc tablica tyle el. typu boolean ile orders");
-
   }
 
   invertAll() {
@@ -91,41 +116,36 @@ class Home extends Component {
     let OrderChecked = this.state.OrderChecked;
     let orders = this.state.orders;
     for (let order in orders) {
+      OrderChecked[order] = !this.state.OrderChecked[order];
       console.log(OrderChecked[order]);
       if (OrderChecked[order] === true) {
         howManyToDelete++;
       }
       //console.log(orders[order].id);
-
-      OrderChecked[order] = !this.state.OrderChecked[order];
     }
 
     this.setState({
       OrderChecked: OrderChecked,
       howManyToDelete: howManyToDelete
     });
-
-    // console.log("do kasacji " + this.state.howManyToDelete);
-    // console.log(OrderChecked);
-    // console.log("ma byc tablica z ODWROCONYMI wartosciami");
-
-
-
   }
 
   delete() {
+    let count = 0;
     let OrderChecked = this.state.OrderChecked;
     let orders = this.state.orders;
     for (let order in orders) {
-      console.log(orders[order].id);
-      console.log("szukam id");
-      console.log(OrderChecked[order]);
-      console.log("szukam boolean");
       if (OrderChecked[order] === true) {
+        count++;
         const itemRef = fire.database().ref(`/orders/${orders[order].id}`);
         //itemRef.remove();
       }
     }
+
+    this.setState({
+      howManyToDelete: count
+    });
+    console.log(count);
   }
 
   search(e) {
@@ -137,108 +157,55 @@ class Home extends Component {
   }
 
   render() {
+    const animationTiming = {
+      enter: 500,
+      exit: 1500
+    };
     return (
       <div>
         <main className="container mt-3">
           <div id="header">
-            <button onClick={this.logout} className="btn btn-success btn-lg ">
-              Logout
-            </button>
-            <div class="card m-3">
-              <div class="card-body">
-                {" "}
-                <div className="d-flex flex-column">
-                  <input
-                    onChange={this.search}
-                    // value={this.state.filteredState}
-                    type="text"
-                    className="form-control-lg"
-                    placeholder="Wyszukaj"
-                  />
-                  <button
-                    className="btn btn-info btn-lg"
-                    onClick={this.invertAll}
-                  >
-                    Zaznacz wszystko
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-danger btn-lg"
-                    data-toggle="modal"
-                    data-target="#exampleModal"
-                  >
-                    Skasuj zaznaczone!
-                  </button>
-                </div>
-                <div>
-                  <div
-                    className="modal fade"
-                    id="exampleModal"
-                    tableindex="-1"
-                    role="dialog"
-                    aria-labelledby="exampleModalLabel"
-                    aria-hidden="true"
-                  >
-                    <div className="modal-dialog" role="document">
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <h5 className="modal-title" id="exampleModalLabel">
-                            Czy napewno chcesz skasować zaznaczone zamówienia ?
-                          </h5>
-                          <button
-                            type="button"
-                            className="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                          >
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-
-                        <div className="modal-body">
-                          Ilość zaznaczonych zamówień:
-                          {this.state.howManyToDelete}
-                        </div>
-
-                        <div className="modal-footer">
-                          <button
-                            type="button"
-                            className="btn btn-secondary"
-                            data-dismiss="modal"
-                          >
-                            Anuluj
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={() => this.delete()}
-                            data-dismiss="modal"
-                          >
-                            Potwierdz
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Logout logout={this.logout} />
+            <MiniMenu
+              search={this.search}
+              invertAll={this.invertAll}
+              delete={this.delete}
+              howManyToDelete={this.state.howManyToDelete}
+            />
           </div>
 
           {this.state.orders
             .filter(searchingFor(this.state.filteredState))
             .map((item, i) => {
               let timeStamp = item.TIMESTAMP.slice(0, 10);
-              // console.log();
 
               return (
-                <div key={i} className="card m-3">
+                <div key={i} className="card m-3 ">
                   <div
-                    className={`card-header text-center table-card-orders ${
+                    className={`card-header text-white text-center table-card-orders text-white ${
                       item.DANE_KLIENTA.idSponsor ? "is-Distributor" : ""
                     }`}
                   >
-                    ZAMOWIENIE: {timeStamp}{" "}
+                    {this.state.showOrder[i] ? (
+                      <div
+                        className="circle white"
+                        onClick={e => {
+                          this.showOrder(item, e);
+                        }}
+                      >
+                        -
+                      </div>
+                    ) : (
+                      <div
+                        className="circle white"
+                        onClick={e => {
+                          this.showOrder(item, e);
+                        }}
+                      >
+                        +
+                      </div>
+                    )}
+                    ZAMOWIENIE: {timeStamp}
                     <div className="check">
                       <input
                         checked={this.state.OrderChecked[i]}
@@ -250,7 +217,12 @@ class Home extends Component {
                       />
                     </div>
                   </div>
-                  <div className="card-body">
+                  {/* <div className="card-body"> */}
+                  <div
+                    className={`card-body ${
+                      this.state.showOrder[i] ? "" : "hide"
+                    }`}
+                  >
                     <table className="table-sm table-bordered mb-3">
                       <thead className="thead-light" />
                       <tbody>
@@ -288,8 +260,8 @@ class Home extends Component {
                     </table>
 
                     <table className="table-sm table-bordered">
-                      <thead className="thead-light ">
-                        <tr>
+                      <thead className="thead-light white-text">
+                        <tr className="white-text">
                           <th
                             className={`table-header-orders ${
                               item.DANE_KLIENTA.idSponsor
@@ -301,7 +273,7 @@ class Home extends Component {
                             Lp:
                           </th>
                           <th
-                            className={`table-header-orders ${
+                            className={`table-header-orders  ${
                               item.DANE_KLIENTA.idSponsor
                                 ? "is-Distributor-light"
                                 : ""
@@ -392,6 +364,7 @@ class Home extends Component {
             })}
         </main>
       </div>
+      // </CSSTransition>
     );
   }
 }
