@@ -49,23 +49,30 @@ class Home extends Component {
 
   showOrderContent(item, i) {
     let showOrder = [];
-    for (let orderId in this.state.orders) {
-      console.log(orderId);
-      if (showOrder[orderId] === undefined) {
-        showOrder[orderId] = false;
-      } else {
-        showOrder[orderId] = showOrder[orderId];
-      }
-    }
+    // for (let orderId in this.state.orders) {
+    //   console.log(orderId);
+    //   if (showOrder[orderId] === undefined) {
+    //     showOrder[orderId] = false;
+    //   } else {
+    //     showOrder[orderId] = showOrder[orderId];
+    //   }
+    // }
 
     for (let orderId in this.state.orders) {
       // dla wszystkich zamowien
+      if (showOrder[orderId] === undefined) {
+        showOrder[orderId] = false;
+      }
       console.log(this.state.orders[orderId]);
       if (item.id === this.state.orders[orderId].id) {
         showOrder[orderId] = !this.state.showOrder[orderId];
       } else {
         showOrder[orderId] = this.state.showOrder[orderId];
       }
+    }
+
+    // bug when searched cant show or hide order with +
+    if (true) {
     }
 
     this.setState({
