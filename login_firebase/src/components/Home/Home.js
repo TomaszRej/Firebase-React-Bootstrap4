@@ -1,21 +1,11 @@
 import React, { Component } from "react";
-import TransitionGroup from "react-transition-group/TransitionGroup";
-import CSSTransition from "react-transition-group/CSSTransition";
+// import TransitionGroup from "react-transition-group/TransitionGroup";
+// import CSSTransition from "react-transition-group/CSSTransition";
+// import Transition from "react-transition-group/Transition";
 import fire from "../../config/Fire";
 import Logout from "../Logout/Logout";
 import MiniMenu from "../MiniMenu/MiniMenu";
-//import OrderContent from "../OrderContent/OrderContent";
-
-function searchingFor(filteredState) {
-  return function(x) {
-    return (
-      x.DANE_KLIENTA.name.toLowerCase().includes(filteredState.toLowerCase()) ||
-      x.DANE_KLIENTA.idNumber
-        .toLowerCase()
-        .includes(filteredState.toLowerCase())
-    );
-  };
-}
+import Order from "../Order/Order";
 
 class Home extends Component {
   constructor(props) {
@@ -25,14 +15,14 @@ class Home extends Component {
     this.delete = this.delete.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
     this.invertAll = this.invertAll.bind(this);
-    this.showOrder = this.showOrder.bind(this);
+    this.showOrderContent = this.showOrderContent.bind(this);
 
     this.state = {
       orders: [],
       filteredState: "",
       howManyToDelete: 0,
       OrderChecked: [],
-      showOrder: false
+      showOrder: [false]
     };
   }
 
@@ -57,7 +47,7 @@ class Home extends Component {
     });
   }
 
-  showOrder(item, i) {
+  showOrderContent(item, i) {
     let showOrder = [];
     for (let orderId in this.state.orders) {
       console.log(orderId);
@@ -164,7 +154,7 @@ class Home extends Component {
     return (
       <div>
         <main className="container mt-3">
-          <div id="header">
+          <section id="header">
             <Logout logout={this.logout} />
             <MiniMenu
               search={this.search}
@@ -172,9 +162,19 @@ class Home extends Component {
               delete={this.delete}
               howManyToDelete={this.state.howManyToDelete}
             />
-          </div>
+          </section>
+          <section>
+            <Order
+              filteredState={this.state.filteredState}
+              showOrderContent={this.showOrderContent}
+              orders={this.state.orders}
+              showOrder={this.state.showOrder}
+              OrderChecked={this.state.OrderChecked}
+              handleCheck={this.handleCheck}
+            />
+          </section>
 
-          {this.state.orders
+          {/* {this.state.orders
             .filter(searchingFor(this.state.filteredState))
             .map((item, i) => {
               let timeStamp = item.TIMESTAMP.slice(0, 10);
@@ -190,7 +190,7 @@ class Home extends Component {
                       <div
                         className="circle white"
                         onClick={e => {
-                          this.showOrder(item, e);
+                          this.showOrderContent(item, e);
                         }}
                       >
                         -
@@ -199,14 +199,15 @@ class Home extends Component {
                       <div
                         className="circle white"
                         onClick={e => {
-                          this.showOrder(item, e);
+                          this.showOrderContent(item, e);
                         }}
                       >
                         +
                       </div>
                     )}
+                    {this.state.showOrder[i]}
                     ZAMOWIENIE: {timeStamp}
-                    <div className="check">
+                    <div className="check white">
                       <input
                         checked={this.state.OrderChecked[i]}
                         type="checkbox"
@@ -217,7 +218,7 @@ class Home extends Component {
                       />
                     </div>
                   </div>
-                  {/* <div className="card-body"> */}
+
                   <div
                     className={`card-body ${
                       this.state.showOrder[i] ? "" : "hide"
@@ -361,10 +362,9 @@ class Home extends Component {
                   </div>
                 </div>
               );
-            })}
+            })} */}
         </main>
       </div>
-      // </CSSTransition>
     );
   }
 }
