@@ -51,7 +51,7 @@ class Home extends Component {
     let showOrder = [];
     //odmutowane do 59
     for (let orderId in this.state.orders) {
-      console.log(orderId);
+      //console.log(orderId);
       if (showOrder[orderId] === undefined) {
         showOrder[orderId] = false;
       } else {
@@ -64,7 +64,7 @@ class Home extends Component {
       if (showOrder[orderId] === undefined) {
         showOrder[orderId] = false;
       }
-      console.log(this.state.orders[orderId]);
+      // console.log(this.state.orders[orderId]);
       if (item.id === this.state.orders[orderId].id) {
         showOrder[orderId] = !this.state.showOrder[orderId];
       } else {
@@ -73,7 +73,13 @@ class Home extends Component {
     }
 
     // bug when searched cant show or hide order with +
-    if (true) {
+    if (this.state.filteredState) {
+      for (let orderId in this.state.orders) {
+        showOrder[orderId] = !this.state.showOrder[orderId];
+      }
+
+      console.log(this.state.filteredState);
+      console.log("filtered STATE");
     }
 
     this.setState({
@@ -81,7 +87,8 @@ class Home extends Component {
     });
 
     console.log(this.state.showOrder);
-    console.log("SHOWORDER");
+    console.log("SHOW ORDER CONTENT");
+    console.log(item.id);
   }
 
   handleCheck(item, e) {

@@ -45,7 +45,7 @@ class Order extends Component {
                         this.props.showOrderContent(item, e);
                       }}
                     >
-                      {this.props.showOrder[i]}-
+                      -
                     </div>
                   ) : (
                     <div
@@ -54,10 +54,10 @@ class Order extends Component {
                         this.props.showOrderContent(item, e);
                       }}
                     >
-                      {this.props.showOrder[i]}+
+                      +
                     </div>
                   )}
-                  ZAMOWIENIE: {timeStamp}
+                  ZAMOWIENIE: {timeStamp + this.props.showOrder[i]}
                   <div className="check white">
                     <input
                       checked={this.props.OrderChecked[i]}
