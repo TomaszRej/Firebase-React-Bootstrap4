@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import Logout from "../Logout/Logout";
+import OrderTable from "../OrderTable/OrderTable";
 
 class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOrder: this.props.showOrder
+      // showOrder: this.props.showOrder
     };
   }
   searchingFor(filteredState) {
@@ -30,6 +32,7 @@ class Order extends Component {
 
             return (
               <div key={i} className="card m-3 ">
+                <Logout />
                 <div
                   className={`card-header text-white text-center table-card-orders text-white ${
                     item.DANE_KLIENTA.idSponsor ? "is-Distributor" : ""
@@ -107,6 +110,8 @@ class Order extends Component {
                       </tr>
                     </tbody>
                   </table>
+                  {/* <ClientDetailsTable/> */}
+                  {/* <OrderTable item={this.props.orders} /> */}
 
                   <table className="table-sm table-bordered">
                     <thead className="thead-light white-text">
