@@ -73,6 +73,8 @@ class Home extends Component {
     }
 
     // bug when searched cant show or hide order with +
+    // prawdopodobnie trzeba bedzie potem zminic zeby tworzylo 
+    //nowy state tablice z przefiltrowanymi recordami zeby + - otwieral oddzielnie
     if (this.state.filteredState) {
       for (let orderId in this.state.orders) {
         showOrder[orderId] = !this.state.showOrder[orderId];

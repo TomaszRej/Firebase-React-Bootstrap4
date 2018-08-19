@@ -5,9 +5,6 @@ import OrderTable from "../OrderTable/OrderTable";
 class Order extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // showOrder: this.props.showOrder
-    };
   }
   searchingFor(filteredState) {
     return function(x) {
@@ -32,7 +29,6 @@ class Order extends Component {
 
             return (
               <div key={i} className="card m-3 ">
-                <Logout />
                 <div
                   className={`card-header text-white text-center table-card-orders text-white ${
                     item.DANE_KLIENTA.idSponsor ? "is-Distributor" : ""
