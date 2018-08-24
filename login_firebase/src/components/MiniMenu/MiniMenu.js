@@ -28,6 +28,7 @@ class Logout extends Component {
               className="btn btn-danger btn-lg"
               data-toggle="modal"
               data-target="#exampleModal"
+              onClick={this.props.countOrdersToDelete}
             >
               Skasuj zaznaczone!
             </button>

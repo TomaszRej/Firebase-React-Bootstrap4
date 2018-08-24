@@ -16,13 +16,14 @@ class Home extends Component {
     this.handleCheck = this.handleCheck.bind(this);
     this.invertAll = this.invertAll.bind(this);
     this.showOrderContent = this.showOrderContent.bind(this);
+    this.countOrdersToDelete = this.countOrdersToDelete.bind(this);
 
     this.state = {
       orders: [],
       filteredState: "",
       howManyToDelete: 0,
       OrderChecked: [],
-      showOrder: [false]
+      showOrder: []
     };
   }
 
@@ -41,81 +42,97 @@ class Home extends Component {
         });
       }
 
+      let OrderChecked = [...this.state.OrderChecked];
+      let showOrder = [...this.state.showOrder];
+      for (let orderId in orders) {
+        OrderChecked[orderId] = false;
+        showOrder[orderId] = false;
+      }
+
       this.setState({
+        showOrder: [...showOrder],
+        OrderChecked: [...OrderChecked],
         orders: [...orders]
       });
     });
   }
 
   showOrderContent(item, i) {
-    let showOrder = [];
-    //odmutowane do 59
-    for (let orderId in this.state.orders) {
-      //console.log(orderId);
-      if (showOrder[orderId] === undefined) {
-        showOrder[orderId] = false;
-      } else {
-        showOrder[orderId] = showOrder[orderId];
-      }
-    }
-
-    for (let orderId in this.state.orders) {
-      // dla wszystkich zamowien
-      if (showOrder[orderId] === undefined) {
-        showOrder[orderId] = false;
-      }
-      // console.log(this.state.orders[orderId]);
-      if (item.id === this.state.orders[orderId].id) {
-        showOrder[orderId] = !this.state.showOrder[orderId];
-      } else {
-        showOrder[orderId] = this.state.showOrder[orderId];
-      }
-    }
-
-    // bug when searched cant show or hide order with +
-    // prawdopodobnie trzeba bedzie potem zminic zeby tworzylo 
-    //nowy state tablice z przefiltrowanymi recordami zeby + - otwieral oddzielnie
-    if (this.state.filteredState) {
-      for (let orderId in this.state.orders) {
-        showOrder[orderId] = !this.state.showOrder[orderId];
-      }
-
-      console.log(this.state.filteredState);
-      console.log("filtered STATE");
-    }
-
-    this.setState({
-      showOrder: [...showOrder]
+    let showOrder = [...this.state.showOrder];
+    const orderIndex = this.state.orders.findIndex(o => {
+      return o.id === item.id;
     });
 
-    console.log(this.state.showOrder);
-    console.log("SHOW ORDER CONTENT");
-    console.log(item.id);
+    showOrder[orderIndex] = !showOrder[orderIndex];
+    for (let orderId in this.state.orders) {
+      showOrder[orderId] = showOrder[orderId];
+    }
+    this.setState({
+      showOrder: showOrder
+    });
+
+    // let showOrder = [];
+    // //odmutowane do 59
+    // for (let orderId in this.state.orders) {
+    //   //console.log(orderId);
+    //   if (showOrder[orderId] === undefined) {
+    //     showOrder[orderId] = false;
+    //   } else {
+    //     showOrder[orderId] = showOrder[orderId];
+    //   }
+    // }
+
+    // for (let orderId in this.state.orders) {
+    //   // dla wszystkich zamowien
+    //   if (showOrder[orderId] === undefined) {
+    //     showOrder[orderId] = false;
+    //   }
+    //   // console.log(this.state.orders[orderId]);
+    //   if (item.id === this.state.orders[orderId].id) {
+    //     showOrder[orderId] = !this.state.showOrder[orderId];
+    //   } else {
+    //     showOrder[orderId] = this.state.showOrder[orderId];
+    //   }
+    // }
+
+    // // bug when searched cant show or hide order with +
+    // // prawdopodobnie trzeba bedzie potem zminic zeby tworzylo
+    // //nowy state tablice z przefiltrowanymi recordami zeby + - otwieral oddzielnie
+    // if (this.state.filteredState) {
+    //   for (let orderId in this.state.orders) {
+    //     showOrder[orderId] = !this.state.showOrder[orderId];
+    //   }
+
+    //   console.log(this.state.filteredState);
+    //   console.log("filtered STATE");
+    // }
+
+    // this.setState({
+    //   showOrder: [...showOrder]
+    // });
+
+    // console.log(this.state.showOrder);
+    // console.log("SHOW ORDER CONTENT");
+    // console.log(item.id);
   }
 
   handleCheck(item, e) {
-    let howManyToDelete = 0;
-    let OrderChecked = this.state.OrderChecked;
-    //OrderChecked[item.id] = e.target.checked;
+    let OrderChecked = [...this.state.OrderChecked];
     let temp = e.target.checked;
-    //console.log(item.id + "+" + OrderChecked[item.id]);
+    const orderIndex = this.state.orders.findIndex(o => {
+      return o.id === item.id;
+    });
+
+    OrderChecked[orderIndex] = temp;
+
     for (let orderId in this.state.orders) {
-      OrderChecked[orderId] = this.state.OrderChecked[orderId];
-      if (this.state.OrderChecked[orderId] === undefined) {
-        OrderChecked[orderId] = false;
-      }
-      if (item.id === this.state.orders[orderId].id) {
-        OrderChecked[orderId] = temp;
-      }
-      if (OrderChecked[orderId] === true) {
-        howManyToDelete++;
-      }
+      OrderChecked[orderId] = OrderChecked[orderId];
     }
 
     this.setState({
-      OrderChecked: [...OrderChecked],
-      howManyToDelete: howManyToDelete
+      OrderChecked: [...OrderChecked]
     });
+    console.log(this.state.OrderChecked);
   }
 
   invertAll() {
@@ -136,11 +153,26 @@ class Home extends Component {
       howManyToDelete: howManyToDelete
     });
   }
+  countOrdersToDelete() {
+    let count = 0;
+    let OrderChecked = [...this.state.OrderChecked];
+    let orders = [...this.state.orders];
+    for (let order in OrderChecked) {
+      if (OrderChecked[order] === true) {
+        count++;
+      }
+    }
+    this.setState({
+      howManyToDelete: count
+    });
+  }
 
   delete() {
+    // w delete obliczac ile do usuniecia
+
     let count = 0;
-    let OrderChecked = this.state.OrderChecked;
-    let orders = this.state.orders;
+    let OrderChecked = [...this.state.OrderChecked];
+    let orders = [...this.state.orders];
     for (let order in orders) {
       if (OrderChecked[order] === true) {
         count++;
@@ -148,11 +180,6 @@ class Home extends Component {
         //itemRef.remove();
       }
     }
-
-    this.setState({
-      howManyToDelete: count
-    });
-    console.log(count);
   }
 
   search(e) {
@@ -189,6 +216,7 @@ class Home extends Component {
               invertAll={this.invertAll}
               delete={this.delete}
               howManyToDelete={this.state.howManyToDelete}
+              countOrdersToDelete={this.countOrdersToDelete}
             />
           </section>
           <section>

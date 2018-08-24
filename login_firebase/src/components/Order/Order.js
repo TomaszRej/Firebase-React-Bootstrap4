@@ -53,7 +53,8 @@ class Order extends Component {
                       +
                     </div>
                   )}
-                  ZAMOWIENIE: {timeStamp + this.props.showOrder[i]}
+                  ZAMOWIENIE:{" "}
+                  {timeStamp + " CHECKED " + this.props.OrderChecked[i]}
                   <div className="check white">
                     <input
                       checked={this.props.OrderChecked[i]}
