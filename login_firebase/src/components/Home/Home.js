@@ -17,12 +17,18 @@ class Home extends Component {
     this.invertAll = this.invertAll.bind(this);
     this.showOrderContent = this.showOrderContent.bind(this);
     this.countOrdersToDelete = this.countOrdersToDelete.bind(this);
-
+    this.handleSearch = this.handleSearch.bind(this);
+    this.clearSearchHandler = this.clearSearchHandler.bind(this);
     this.state = {
       orders: [],
+      tempOrders: [],
       filteredState: "",
+      empty: "Wyszukaj",
+      clearSearch: false,
+      searchValue: "",
       howManyToDelete: 0,
       OrderChecked: [],
+      tempOrderChecked: [],
       showOrder: []
     };
   }
@@ -44,12 +50,15 @@ class Home extends Component {
 
       let OrderChecked = [...this.state.OrderChecked];
       let showOrder = [...this.state.showOrder];
+
       for (let orderId in orders) {
         OrderChecked[orderId] = false;
         showOrder[orderId] = false;
       }
 
       this.setState({
+        tempOrders: [...orders],
+        tempOrderChecked: [OrderChecked],
         showOrder: [...showOrder],
         OrderChecked: [...OrderChecked],
         orders: [...orders]
@@ -118,39 +127,47 @@ class Home extends Component {
 
   handleCheck(item, e) {
     let OrderChecked = [...this.state.OrderChecked];
+    let tempOrderChecked = [...this.state.tempOrderChecked];
     let temp = e.target.checked;
     const orderIndex = this.state.orders.findIndex(o => {
       return o.id === item.id;
     });
 
+    const tempOrderIndex = this.state.tempOrders.findIndex(o => {
+      return o.id === item.id;
+    });
     OrderChecked[orderIndex] = temp;
-
     for (let orderId in this.state.orders) {
       OrderChecked[orderId] = OrderChecked[orderId];
     }
 
-    this.setState({
-      OrderChecked: [...OrderChecked]
-    });
-    console.log(this.state.OrderChecked);
-  }
-
-  invertAll() {
-    let howManyToDelete = 0;
-    let OrderChecked = this.state.OrderChecked;
-    let orders = this.state.orders;
-    for (let order in orders) {
-      OrderChecked[order] = !this.state.OrderChecked[order];
-      console.log(OrderChecked[order]);
-      if (OrderChecked[order] === true) {
-        howManyToDelete++;
+    if (this.state.clearSearch) {
+      tempOrderChecked[tempOrderIndex] = temp;
+      for (let i in this.state.tempOrders) {
+        tempOrderChecked[i] = tempOrderChecked[i];
       }
-      //console.log(orders[order].id);
     }
 
     this.setState({
-      OrderChecked: [...OrderChecked],
-      howManyToDelete: howManyToDelete
+      tempOrderChecked: [...tempOrderChecked],
+      OrderChecked: [...OrderChecked]
+    });
+    console.log(this.state.tempOrderChecked);
+  }
+
+  invertAll() {
+    let OrderChecked = [...this.state.OrderChecked];
+    let tempOrderChecked = [...this.state.tempOrderChecked];
+    for (let order in OrderChecked) {
+      OrderChecked[order] = !this.state.OrderChecked[order];
+    }
+    for (let i in tempOrderChecked) {
+      tempOrderChecked[i] = !this.state.tempOrderChecked[i];
+    }
+
+    this.setState({
+      tempOrderChecked: [...tempOrderChecked],
+      OrderChecked: [...OrderChecked]
     });
   }
   countOrdersToDelete() {
@@ -183,18 +200,89 @@ class Home extends Component {
   }
 
   search(e) {
-    let showOrder = [];
-    for (let orderId in this.state.orders) {
-      showOrder[orderId] = this.state.orders[orderId];
+    let filteredState = [...this.state.filteredState];
+    let orders = [...this.state.orders];
+    filteredState = e.target.value;
+    //??
+    // if (this.state.filteredState === "") {
+    //   clearSearch = !this.state.clearSearch;
+    //   console.log("empty");
+    //   for (let order in this.state.orders) {
+    //     orders[order] = this.state.orders[order];
+    //   }
+    // }
+    this.setState({
+      orders: orders,
+      filteredState: filteredState
+    });
+  }
+  clearSearchHandler() {
+    //console.log(this.state.OrderChecked);
+
+    let orders = [...this.state.tempOrders];
+    let OrderChecked = [...this.state.tempOrderChecked];
+
+    for (let i in this.state.orders) {
+      if (this.state.orders[i] !== this.state.tempOrders[i]) {
+        orders[i] = this.state.tempOrders[i];
+      } else {
+      }
+      if (this.state.OrderChecked[i] !== this.state.tempOrderChecked[i]) {
+        OrderChecked[i] = this.state.tempOrderChecked[i];
+      } else {
+        OrderChecked[i] = this.state.OrderChecked[i];
+      }
     }
 
     this.setState({
-      filteredState: e.target.value
+      clearSearch: !this.state.clearSearch,
+      orders: orders,
+      OrderChecked: OrderChecked
     });
-    console.log("*************");
-    console.log(this.state.showOrder);
-    console.log(this.state.filteredState);
-    console.log("*************");
+  }
+
+  handleSearch() {
+    let tempOrders = [...this.state.tempOrders];
+    let tempOrderChecked = [...this.state.tempOrderChecked];
+    let orders = [...this.state.orders];
+    let OrderChecked = [...this.state.OrderChecked];
+    if (this.state.filteredState) {
+      for (let i in this.state.orders) {
+        if (
+          this.state.orders[i].DANE_KLIENTA.name.indexOf(
+            this.state.filteredState
+          ) !== -1 ||
+          this.state.orders[i].DANE_KLIENTA.idNumber.indexOf(
+            this.state.filteredState
+          ) !== -1
+        ) {
+          //console.log(this.state.orders[i].id);
+
+          orders[0] = this.state.orders[i];
+          orders[i] = this.state.orders[0];
+          OrderChecked[0] = this.state.OrderChecked[i];
+          OrderChecked[i] = this.state.OrderChecked[0];
+
+          tempOrders[0] = this.state.orders[0];
+          tempOrders[i] = this.state.orders[i];
+          tempOrderChecked[0] = this.state.OrderChecked[0];
+          tempOrderChecked[i] = this.state.OrderChecked[i];
+        } else {
+          tempOrders[i] = orders[i];
+          tempOrderChecked[i] = OrderChecked[i];
+        }
+      }
+
+      this.setState({
+        tempOrders: tempOrders,
+        tempOrderChecked: tempOrderChecked,
+        clearSearch: !this.state.clearSearch,
+        OrderChecked: OrderChecked,
+        orders: orders
+      });
+      //console.log("handkeseart");
+      //console.log(this.state.searchValue);
+    }
   }
 
   logout() {
@@ -213,10 +301,14 @@ class Home extends Component {
             <Logout logout={this.logout} />
             <MiniMenu
               search={this.search}
+              clearSearch={this.state.clearSearch}
               invertAll={this.invertAll}
               delete={this.delete}
               howManyToDelete={this.state.howManyToDelete}
               countOrdersToDelete={this.countOrdersToDelete}
+              handleSearch={this.handleSearch}
+              clearSearchHandler={this.clearSearchHandler}
+              empty={this.state.empty}
             />
           </section>
           <section>
@@ -227,6 +319,7 @@ class Home extends Component {
               showOrder={this.state.showOrder}
               OrderChecked={this.state.OrderChecked}
               handleCheck={this.handleCheck}
+              searchValue={this.state.searchValue}
             />
           </section>
         </main>

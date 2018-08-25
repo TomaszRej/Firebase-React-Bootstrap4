@@ -10,13 +10,32 @@ class Logout extends Component {
       <div class="card m-3">
         <div class="card-body">
           <div className="d-flex flex-column">
-            <input
-              onChange={this.props.search}
-              // value={this.state.filteredState}
-              type="text"
-              className="form-control-lg"
-              placeholder="Wyszukaj"
-            />
+            {this.props.clearSearch ? (
+              <div className=" search">
+                <button
+                  className="btn btn-danger btn-lg"
+                  onClick={this.props.clearSearchHandler}
+                >
+                  Wróć
+                </button>
+              </div>
+            ) : (
+              <div className=" search">
+                <input
+                  onChange={this.props.search}
+                  // value={this.state.filteredState}
+                  type="text"
+                  className="form-control-lg"
+                  placeholder={this.props.empty}
+                />
+                <button
+                  className="btn btn-primary btn-lg"
+                  onClick={this.props.handleSearch}
+                >
+                  Szukaj
+                </button>
+              </div>
+            )}
             <button
               className="btn btn-info btn-lg"
               onClick={this.props.invertAll}
