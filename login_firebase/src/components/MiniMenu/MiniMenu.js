@@ -36,12 +36,17 @@ class Logout extends Component {
                 </button>
               </div>
             )}
-            <button
-              className="btn btn-info btn-lg"
-              onClick={this.props.invertAll}
-            >
-              Zaznacz wszystko
-            </button>
+            {this.props.clearSearch ? (
+              ""
+            ) : (
+              <button
+                className="btn btn-info btn-lg"
+                onClick={this.props.invertAll}
+              >
+                Zaznacz wszystko
+              </button>
+            )}
+
             <button
               type="button"
               className="btn btn-danger btn-lg"

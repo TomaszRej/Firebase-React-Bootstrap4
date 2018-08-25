@@ -29,7 +29,8 @@ class Home extends Component {
       howManyToDelete: 0,
       OrderChecked: [],
       tempOrderChecked: [],
-      showOrder: []
+      showOrder: [],
+      displayOrder: []
     };
   }
 
@@ -50,13 +51,16 @@ class Home extends Component {
 
       let OrderChecked = [...this.state.OrderChecked];
       let showOrder = [...this.state.showOrder];
+      let displayOrder = [...this.state.displayOrder];
 
       for (let orderId in orders) {
         OrderChecked[orderId] = false;
         showOrder[orderId] = false;
+        displayOrder[orderId] = true;
       }
 
       this.setState({
+        displayOrder: displayOrder,
         tempOrders: [...orders],
         tempOrderChecked: [OrderChecked],
         showOrder: [...showOrder],
@@ -79,50 +83,6 @@ class Home extends Component {
     this.setState({
       showOrder: showOrder
     });
-
-    // let showOrder = [];
-    // //odmutowane do 59
-    // for (let orderId in this.state.orders) {
-    //   //console.log(orderId);
-    //   if (showOrder[orderId] === undefined) {
-    //     showOrder[orderId] = false;
-    //   } else {
-    //     showOrder[orderId] = showOrder[orderId];
-    //   }
-    // }
-
-    // for (let orderId in this.state.orders) {
-    //   // dla wszystkich zamowien
-    //   if (showOrder[orderId] === undefined) {
-    //     showOrder[orderId] = false;
-    //   }
-    //   // console.log(this.state.orders[orderId]);
-    //   if (item.id === this.state.orders[orderId].id) {
-    //     showOrder[orderId] = !this.state.showOrder[orderId];
-    //   } else {
-    //     showOrder[orderId] = this.state.showOrder[orderId];
-    //   }
-    // }
-
-    // // bug when searched cant show or hide order with +
-    // // prawdopodobnie trzeba bedzie potem zminic zeby tworzylo
-    // //nowy state tablice z przefiltrowanymi recordami zeby + - otwieral oddzielnie
-    // if (this.state.filteredState) {
-    //   for (let orderId in this.state.orders) {
-    //     showOrder[orderId] = !this.state.showOrder[orderId];
-    //   }
-
-    //   console.log(this.state.filteredState);
-    //   console.log("filtered STATE");
-    // }
-
-    // this.setState({
-    //   showOrder: [...showOrder]
-    // });
-
-    // console.log(this.state.showOrder);
-    // console.log("SHOW ORDER CONTENT");
-    // console.log(item.id);
   }
 
   handleCheck(item, e) {
@@ -158,6 +118,7 @@ class Home extends Component {
   invertAll() {
     let OrderChecked = [...this.state.OrderChecked];
     let tempOrderChecked = [...this.state.tempOrderChecked];
+
     for (let order in OrderChecked) {
       OrderChecked[order] = !this.state.OrderChecked[order];
     }
@@ -218,11 +179,13 @@ class Home extends Component {
   }
   clearSearchHandler() {
     //console.log(this.state.OrderChecked);
-
+    let empty = [...this.state.empty];
     let orders = [...this.state.tempOrders];
     let OrderChecked = [...this.state.tempOrderChecked];
+    let displayOrder = [...this.state.displayOrder];
 
     for (let i in this.state.orders) {
+      displayOrder[i] = true;
       if (this.state.orders[i] !== this.state.tempOrders[i]) {
         orders[i] = this.state.tempOrders[i];
       } else {
@@ -233,8 +196,11 @@ class Home extends Component {
         OrderChecked[i] = this.state.OrderChecked[i];
       }
     }
+    empty = this.state.filteredState;
 
     this.setState({
+      empty: empty,
+      displayOrder: displayOrder,
       clearSearch: !this.state.clearSearch,
       orders: orders,
       OrderChecked: OrderChecked
@@ -246,8 +212,11 @@ class Home extends Component {
     let tempOrderChecked = [...this.state.tempOrderChecked];
     let orders = [...this.state.orders];
     let OrderChecked = [...this.state.OrderChecked];
+    let displayOrder = [...this.state.displayOrder];
+
     if (this.state.filteredState) {
       for (let i in this.state.orders) {
+        displayOrder[i] = false;
         if (
           this.state.orders[i].DANE_KLIENTA.name.indexOf(
             this.state.filteredState
@@ -257,6 +226,7 @@ class Home extends Component {
           ) !== -1
         ) {
           //console.log(this.state.orders[i].id);
+          displayOrder[0] = true;
 
           orders[0] = this.state.orders[i];
           orders[i] = this.state.orders[0];
@@ -274,6 +244,7 @@ class Home extends Component {
       }
 
       this.setState({
+        displayOrder: displayOrder,
         tempOrders: tempOrders,
         tempOrderChecked: tempOrderChecked,
         clearSearch: !this.state.clearSearch,
@@ -320,6 +291,7 @@ class Home extends Component {
               OrderChecked={this.state.OrderChecked}
               handleCheck={this.handleCheck}
               searchValue={this.state.searchValue}
+              displayOrder={this.state.displayOrder}
             />
           </section>
         </main>

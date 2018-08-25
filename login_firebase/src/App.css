@@ -8,6 +8,10 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.DontDisplayOrder {
+  display: none;
+}
 .card .card-header {
   color: white !important;
 }
