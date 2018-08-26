@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Logout extends Component {
+class MiniMenu extends Component {
   constructor(props) {
     super(props);
   }
@@ -56,6 +56,13 @@ class Logout extends Component {
             >
               Skasuj zaznaczone!
             </button>
+            <a
+              className="btn btn-primary btn-lg"
+              onClick={this.props.download}
+              href="data.csv"
+            >
+              Eksportuj CSV
+            </a>
           </div>
           <div>
             <div
@@ -114,4 +121,4 @@ class Logout extends Component {
   }
 }
 
-export default Logout;
+export default MiniMenu;

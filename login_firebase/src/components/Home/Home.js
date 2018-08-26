@@ -19,6 +19,7 @@ class Home extends Component {
     this.countOrdersToDelete = this.countOrdersToDelete.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.clearSearchHandler = this.clearSearchHandler.bind(this);
+    this.download = this.download.bind(this);
     this.state = {
       orders: [],
       tempOrders: [],
@@ -260,6 +261,63 @@ class Home extends Component {
     fire.auth().signOut();
   }
 
+  download(e) {
+    let tempContents = [];
+    for (let order in this.state.orders) {
+      let timeStamp = this.state.orders[order].TIMESTAMP.slice(0, 10);
+      for (let o in this.state.orders[order].ZAMOWIENIE) {
+        tempContents[order] =
+          "ZAMOWIENIE: " +
+          timeStamp +
+          "\n" +
+          this.state.orders[order].DANE_KLIENTA.name +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.idNumber +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.sponsorName +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.idSponsor +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.email +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.street +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.houseNumber +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.city +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.postCode +
+          " " +
+          this.state.orders[order].DANE_KLIENTA.phone +
+          "\n" +
+          this.state.orders[order].ZAMOWIENIE[o].A +
+          " " +
+          this.state.orders[order].ZAMOWIENIE[o].B +
+          " " +
+          this.state.orders[order].ZAMOWIENIE[o].C +
+          " " +
+          this.state.orders[order].ZAMOWIENIE[o].D +
+          " " +
+          this.state.orders[order].ZAMOWIENIE[o].E +
+          " " +
+          this.state.orders[order].ZAMOWIENIE[o].H +
+          " " +
+          this.state.orders[order].ZAMOWIENIE[o].I +
+          " " +
+          this.state.orders[order].ZAMOWIENIE[o].Q +
+          " " +
+          "\n";
+      }
+    }
+
+    let contents = [];
+    contents = tempContents;
+    const URL = window.URL;
+    const blob = new Blob([contents], { type: "text/csv" });
+    e.target.href = URL.createObjectURL(blob);
+    e.target.download = "data.csv";
+  }
+
   render() {
     const animationTiming = {
       enter: 500,
@@ -280,6 +338,7 @@ class Home extends Component {
               handleSearch={this.handleSearch}
               clearSearchHandler={this.clearSearchHandler}
               empty={this.state.empty}
+              download={this.download}
             />
           </section>
           <section>
