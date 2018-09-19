@@ -27,12 +27,12 @@ class Order extends Component {
           let timeStamp = item.TIMESTAMP.slice(0, 10);
 
           return (
-            <div key={i} className="card m-3">
+            <div key={i} className="card m-3 minimum-width">
               <div
                 className={this.props.displayOrder[i] ? "" : "DontDisplayOrder"}
               >
                 <div
-                  className={`card-header text-white text-center table-card-orders text-white ${
+                  className={`card-header text-white text-center table-card-orders text-white  ${
                     item.DANE_KLIENTA.idSponsor ? "is-Distributor" : ""
                   }`}
                 >
@@ -69,11 +69,11 @@ class Order extends Component {
                 </div>
 
                 <div
-                  className={`card-body ${
+                  className={`card-body  ${
                     this.props.showOrder[i] ? "" : "hide"
                   }`}
                 >
-                  <table className="table-sm table-bordered mb-3">
+                  <table className="table-sm table-bordered mb-3  m-auto">
                     <thead className="thead-light" />
                     <tbody>
                       <tr>
@@ -111,7 +111,7 @@ class Order extends Component {
                   {/* <ClientDetailsTable/> */}
                   {/* <OrderTable item={this.props.orders} /> */}
 
-                  <table className="table-sm table-bordered">
+                  <table className="table-sm table-bordered m-auto mt-3">
                     <thead className="thead-light white-text">
                       <tr className="white-text">
                         <th

@@ -7,63 +7,70 @@ class MiniMenu extends Component {
 
   render() {
     return (
-      <div class="card m-3">
-        <div class="card-body">
-          <div className="d-flex flex-column">
+      <div>
+        <div>
+          <div className="d-flex">
             {this.props.clearSearch ? (
-              <div className=" search">
-                <button
-                  className="btn btn-danger btn-lg"
-                  onClick={this.props.clearSearchHandler}
-                >
-                  Wróć
-                </button>
-              </div>
+              <button
+                className="btn btn-danger btn-lg"
+                onClick={this.props.clearSearchHandler}
+              >
+                Wróć
+              </button>
             ) : (
               <div className=" search">
                 <input
                   onChange={this.props.search}
                   // value={this.state.filteredState}
                   type="text"
-                  className="form-control-lg"
-                  placeholder={this.props.empty}
+                  className="form-control-lg mr-3"
+                  placeholder="Szukaj"
                 />
                 <button
-                  className="btn btn-primary btn-lg"
+                  className="btn btn-primary btn-lg mr-3"
                   onClick={this.props.handleSearch}
                 >
                   Szukaj
                 </button>
               </div>
             )}
-            {this.props.clearSearch ? (
-              ""
-            ) : (
-              <button
-                className="btn btn-info btn-lg"
-                onClick={this.props.invertAll}
-              >
-                Zaznacz wszystko
-              </button>
-            )}
 
             <button
-              type="button"
-              className="btn btn-danger btn-lg"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={this.props.countOrdersToDelete}
+              onClick={this.props.logout}
+              className="btn btn-success btn-lg "
             >
-              Skasuj zaznaczone!
+              Logout
             </button>
-            <a
-              className="btn btn-primary btn-lg"
-              onClick={this.props.download}
-              href="data.csv"
-            >
-              Eksportuj CSV
-            </a>
           </div>
+
+          {this.props.clearSearch ? (
+            ""
+          ) : (
+            <button
+              className="btn btn-info btn-lg mr-3"
+              onClick={this.props.invertAll}
+            >
+              Zaznacz wszystko
+            </button>
+          )}
+
+          <button
+            type="button"
+            className="btn btn-danger btn-lg mr-3"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            onClick={this.props.countOrdersToDelete}
+          >
+            Skasuj zaznaczone!
+          </button>
+          <a
+            className="btn btn-primary btn-lg"
+            onClick={this.props.download}
+            href="data.csv"
+          >
+            Eksportuj CSV
+          </a>
+
           <div>
             <div
               className="modal fade"

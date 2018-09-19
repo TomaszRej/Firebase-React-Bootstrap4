@@ -8,7 +8,15 @@ body {
   height: 100%;
   width: 100%;
 }
-
+.minimum-width {
+  min-width: 500px;
+}
+.margin-botton {
+  margin-bottom: 20px;
+}
+.table-sm .table-bordered {
+  min-width: 300px;
+}
 .DontDisplayOrder {
   display: none;
 }

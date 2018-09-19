@@ -24,7 +24,6 @@ class Home extends Component {
       orders: [],
       tempOrders: [],
       filteredState: "",
-      empty: "Wyszukaj",
       clearSearch: false,
       searchValue: "",
       howManyToDelete: 0,
@@ -180,7 +179,6 @@ class Home extends Component {
   }
   clearSearchHandler() {
     //console.log(this.state.OrderChecked);
-    let empty = [...this.state.empty];
     let orders = [...this.state.tempOrders];
     let OrderChecked = [...this.state.tempOrderChecked];
     let displayOrder = [...this.state.displayOrder];
@@ -197,10 +195,9 @@ class Home extends Component {
         OrderChecked[i] = this.state.OrderChecked[i];
       }
     }
-    empty = this.state.filteredState;
 
     this.setState({
-      empty: empty,
+      filteredState: "",
       displayOrder: displayOrder,
       clearSearch: !this.state.clearSearch,
       orders: orders,
@@ -327,7 +324,6 @@ class Home extends Component {
       <div>
         <main className="container mt-3">
           <section id="header">
-            <Logout logout={this.logout} />
             <MiniMenu
               search={this.search}
               clearSearch={this.state.clearSearch}
@@ -337,8 +333,8 @@ class Home extends Component {
               countOrdersToDelete={this.countOrdersToDelete}
               handleSearch={this.handleSearch}
               clearSearchHandler={this.clearSearchHandler}
-              empty={this.state.empty}
               download={this.download}
+              logout={this.logout}
             />
           </section>
           <section>
