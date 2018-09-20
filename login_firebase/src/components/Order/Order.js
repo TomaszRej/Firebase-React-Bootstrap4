@@ -1,11 +1,6 @@
 import React, { Component } from "react";
-import Logout from "../Logout/Logout";
-import OrderTable from "../OrderTable/OrderTable";
 
 class Order extends Component {
-  constructor(props) {
-    super(props);
-  }
   searchingFor(filteredState) {
     return function(x) {
       return (
@@ -20,41 +15,40 @@ class Order extends Component {
   }
 
   render() {
-    //  .filter(this.searchingFor(this.props.filteredState))
     return (
       <div>
         {this.props.orders.map((item, i) => {
           let timeStamp = item.TIMESTAMP.slice(0, 10);
+          let distributor = "";
+          let distributorPrice = "Cena Katalogowa";
+          let signOfOrder = "+";
+          if (item.DANE_KLIENTA.idSponsor) {
+            distributor = "is-Distributor";
+          }
 
+          if (item.DANE_KLIENTA.idSponsor) {
+            distributorPrice = "Cena Dystrybutora";
+          }
+
+          if (this.props.showOrder[i]) {
+            signOfOrder = "-";
+          }
           return (
             <div key={i} className="card m-3 minimum-width">
               <div
                 className={this.props.displayOrder[i] ? "" : "DontDisplayOrder"}
               >
                 <div
-                  className={`card-header text-white text-center table-card-orders text-white  ${
-                    item.DANE_KLIENTA.idSponsor ? "is-Distributor" : ""
-                  }`}
+                  className={`card-header text-white text-center table-card-orders text-white  ${distributor}`}
                 >
-                  {this.props.showOrder[i] ? (
-                    <div
-                      className="circle white"
-                      onClick={e => {
-                        this.props.showOrderContent(item, e);
-                      }}
-                    >
-                      -
-                    </div>
-                  ) : (
-                    <div
-                      className="circle white"
-                      onClick={e => {
-                        this.props.showOrderContent(item, e);
-                      }}
-                    >
-                      +
-                    </div>
-                  )}
+                  <div
+                    className="circle white"
+                    onClick={e => {
+                      this.props.showOrderContent(item, e);
+                    }}
+                  >
+                    {signOfOrder}
+                  </div>
                   ZAMOWIENIE: {timeStamp}
                   <div className="check white">
                     <input
@@ -63,7 +57,6 @@ class Order extends Component {
                       onChange={e => {
                         this.props.handleCheck(item, e);
                       }}
-                      // className="form-check-input"
                     />
                   </div>
                 </div>
@@ -108,90 +101,58 @@ class Order extends Component {
                       </tr>
                     </tbody>
                   </table>
-                  {/* <ClientDetailsTable/> */}
-                  {/* <OrderTable item={this.props.orders} /> */}
 
                   <table className="table-sm table-bordered m-auto mt-3">
                     <thead className="thead-light white-text">
                       <tr className="white-text">
                         <th
-                          className={`table-header-orders ${
-                            item.DANE_KLIENTA.idSponsor
-                              ? "is-Distributor-light"
-                              : ""
-                          }`}
+                          className={`table-header-orders ${distributor}`}
                           scope="col"
                         >
                           Lp:
                         </th>
                         <th
-                          className={`table-header-orders  ${
-                            item.DANE_KLIENTA.idSponsor
-                              ? "is-Distributor-light"
-                              : ""
-                          }`}
+                          className={`table-header-orders  ${distributor}`}
                           scope="col"
                         >
                           Numer Produktu
                         </th>
                         <th
-                          className={`table-header-orders ${
-                            item.DANE_KLIENTA.idSponsor
-                              ? "is-Distributor-light"
-                              : ""
-                          }`}
+                          className={`table-header-orders ${distributor}`}
                           scope="col"
                         >
                           Ilość
                         </th>
                         <th
-                          className={`table-header-orders ${
-                            item.DANE_KLIENTA.idSponsor
-                              ? "is-Distributor-light"
-                              : ""
-                          }`}
+                          className={`table-header-orders ${distributor}`}
                           scope="col"
                         >
                           Nazwa Produktu
                         </th>
                         <th
-                          className={`table-header-orders ${
-                            item.DANE_KLIENTA.idSponsor
-                              ? "is-Distributor-light"
-                              : ""
-                          }`}
+                          className={`table-header-orders ${distributor}`}
                           scope="col"
                         >
                           Punkty
                         </th>
-                        {item.DANE_KLIENTA.idSponsor ? (
-                          <th
-                            className={`table-header-orders ${
-                              item.DANE_KLIENTA.idSponsor
-                                ? "is-Distributor-light"
-                                : ""
-                            }`}
-                            scope="col"
-                          >
-                            Cena Dystrybutora
-                          </th>
-                        ) : (
-                          <th
-                            className={`table-header-orders ${
-                              item.DANE_KLIENTA.idSponsor
-                                ? "is-Distributor-light"
-                                : ""
-                            }`}
-                            scope="col"
-                          >
-                            Cena Katalogowa
-                          </th>
-                        )}
+                        <th
+                          className={`table-header-orders ${distributor}`}
+                          scope="col"
+                        >
+                          {distributorPrice}
+                        </th>
+                        ;
                       </tr>
                     </thead>
 
                     {this.props.orders[i].ZAMOWIENIE.map((y, lineNumber) => {
                       lineNumber++;
+                      let price = y.C;
+
+                      if (item.DANE_KLIENTA.sponsorName) {
+                        price = y.D;
+                      }
+
                       return (
                         <tbody key={lineNumber}>
                           <tr>
@@ -200,11 +161,7 @@ class Order extends Component {
                             <td>{y.Q}</td>
                             <td>{y.B}</td>
                             <td>{y.E}</td>
-                            {item.DANE_KLIENTA.sponsorName ? (
-                              <td>{y.D}</td>
-                            ) : (
-                              <td>{y.C}</td>
-                            )}
+                            <td>{price}</td>
                           </tr>
                         </tbody>
                       );

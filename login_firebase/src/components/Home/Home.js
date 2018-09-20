@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-// import TransitionGroup from "react-transition-group/TransitionGroup";
-// import CSSTransition from "react-transition-group/CSSTransition";
-// import Transition from "react-transition-group/Transition";
 import fire from "../../config/Fire";
-import Logout from "../Logout/Logout";
 import MiniMenu from "../MiniMenu/MiniMenu";
 import Order from "../Order/Order";
 
@@ -134,7 +130,6 @@ class Home extends Component {
   countOrdersToDelete() {
     let count = 0;
     let OrderChecked = [...this.state.OrderChecked];
-    let orders = [...this.state.orders];
     for (let order in OrderChecked) {
       if (OrderChecked[order] === true) {
         count++;
@@ -146,16 +141,12 @@ class Home extends Component {
   }
 
   delete() {
-    // w delete obliczac ile do usuniecia
-
-    let count = 0;
     let OrderChecked = [...this.state.OrderChecked];
     let orders = [...this.state.orders];
     for (let order in orders) {
       if (OrderChecked[order] === true) {
-        count++;
         const itemRef = fire.database().ref(`/orders/${orders[order].id}`);
-        //itemRef.remove();
+        itemRef.remove();
       }
     }
   }
@@ -164,21 +155,13 @@ class Home extends Component {
     let filteredState = [...this.state.filteredState];
     let orders = [...this.state.orders];
     filteredState = e.target.value;
-    //??
-    // if (this.state.filteredState === "") {
-    //   clearSearch = !this.state.clearSearch;
-    //   console.log("empty");
-    //   for (let order in this.state.orders) {
-    //     orders[order] = this.state.orders[order];
-    //   }
-    // }
+
     this.setState({
       orders: orders,
       filteredState: filteredState
     });
   }
   clearSearchHandler() {
-    //console.log(this.state.OrderChecked);
     let orders = [...this.state.tempOrders];
     let OrderChecked = [...this.state.tempOrderChecked];
     let displayOrder = [...this.state.displayOrder];
@@ -223,7 +206,6 @@ class Home extends Component {
             this.state.filteredState
           ) !== -1
         ) {
-          //console.log(this.state.orders[i].id);
           displayOrder[0] = true;
 
           orders[0] = this.state.orders[i];
@@ -249,8 +231,6 @@ class Home extends Component {
         OrderChecked: OrderChecked,
         orders: orders
       });
-      //console.log("handkeseart");
-      //console.log(this.state.searchValue);
     }
   }
 
@@ -316,10 +296,6 @@ class Home extends Component {
   }
 
   render() {
-    const animationTiming = {
-      enter: 500,
-      exit: 1500
-    };
     return (
       <div>
         <main className="container mt-3">

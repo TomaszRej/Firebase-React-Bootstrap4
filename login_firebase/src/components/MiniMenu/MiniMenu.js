@@ -1,58 +1,54 @@
 import React, { Component } from "react";
-
+import Logout from "../Logout/Logout";
 class MiniMenu extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
+    let searchArea = (
+      <div className="search">
+        <input
+          onChange={this.props.search}
+          type="text"
+          className="form-control-lg mr-3"
+          placeholder="Szukaj"
+        />
+        <button
+          className="btn btn-primary btn-lg mr-3"
+          onClick={this.props.handleSearch}
+        >
+          Szukaj
+        </button>
+      </div>
+    );
+
+    let selectAll = (
+      <button
+        className="btn btn-info btn-lg mr-3"
+        onClick={this.props.invertAll}
+      >
+        Zaznacz wszystko
+      </button>
+    );
+
+    if (this.props.clearSearch) {
+      searchArea = (
+        <button
+          className="btn btn-danger btn-lg"
+          onClick={this.props.clearSearchHandler}
+        >
+          Wróć
+        </button>
+      );
+      selectAll = "";
+    }
+
     return (
       <div>
         <div>
           <div className="d-flex">
-            {this.props.clearSearch ? (
-              <button
-                className="btn btn-danger btn-lg"
-                onClick={this.props.clearSearchHandler}
-              >
-                Wróć
-              </button>
-            ) : (
-              <div className=" search">
-                <input
-                  onChange={this.props.search}
-                  // value={this.state.filteredState}
-                  type="text"
-                  className="form-control-lg mr-3"
-                  placeholder="Szukaj"
-                />
-                <button
-                  className="btn btn-primary btn-lg mr-3"
-                  onClick={this.props.handleSearch}
-                >
-                  Szukaj
-                </button>
-              </div>
-            )}
-
-            <button
-              onClick={this.props.logout}
-              className="btn btn-success btn-lg "
-            >
-              Logout
-            </button>
+            {searchArea}
+            <Logout logout={this.props.logout} />
           </div>
 
-          {this.props.clearSearch ? (
-            ""
-          ) : (
-            <button
-              className="btn btn-info btn-lg mr-3"
-              onClick={this.props.invertAll}
-            >
-              Zaznacz wszystko
-            </button>
-          )}
+          {selectAll}
 
           <button
             type="button"
