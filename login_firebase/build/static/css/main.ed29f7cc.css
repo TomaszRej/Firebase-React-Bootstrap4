@@ -1,0 +1,175 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+}
+.minimum-width {
+  min-width: 500px;
+}
+.margin-botton {
+  margin-bottom: 20px;
+}
+.table-sm .table-bordered {
+  min-width: 300px;
+}
+.DontDisplayOrder {
+  display: none;
+}
+.card .card-header {
+  color: #fff !important;
+}
+.card-body {
+  -webkit-transition: all 0.5s ease-out;
+  -o-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out;
+}
+.OrderOpen {
+  height: 100%;
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+}
+.OrderClosed {
+  height: 0;
+  opacity: 0;
+  -webkit-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+.hide {
+  display: none;
+}
+.white-text {
+  color: #fff !important;
+}
+.white {
+  float: left;
+  background-color: #000;
+}
+#header {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.table-header-orders {
+  background-color: #90caf9 !important;
+  color: #000 !important;
+}
+.table-card-orders {
+  background-color: #42a5f5 !important;
+  color: #000 !important;
+}
+.is-Distributor {
+  background-color: #26a69a !important;
+}
+.is-Distributor-light {
+  background-color: #80cbc4 !important;
+}
+.button {
+  -ms-flex-pack: end;
+  justify-content: end;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.button,
+.container-flow {
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+.main {
+  background-image: url(../../static/media/tiande.c9f6a8a9.jpg);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-attachment: fixed;
+}
+.languageSwitcher {
+  float: right;
+}
+.login-container {
+  color: #fff;
+  height: 100%;
+  width: 100%;
+  min-height: 100vh;
+  -ms-flex-pack: center;
+  justify-content: center;
+  /* background-image: url(../../static/media/tiande.c9f6a8a9.jpg); */
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-attachment: fixed;
+}
+.login-container,
+.test {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.test {
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+.all-orders,
+.test {
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+}
+.all-orders {
+  -ms-flex-align: center;
+  align-items: center;
+}
+.main-block {
+  padding: 10px;
+}
+.form {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+  border-radius: 10px;
+  height: 48vh;
+  width: 24vw;
+  min-width: 300px;
+  min-height: 300px;
+  -webkit-box-shadow: 0 0 41px -7px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 41px -7px rgba(0, 0, 0, 0.75);
+}
+.title {
+  padding: 15px;
+  background-color: hsla(0, 0%, 100%, 0.4);
+  font-family: Titillium Web, sans-serif;
+  min-width: 350px;
+}
+.btn {
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+.check {
+  float: right;
+}
+.white {
+  background-color: hsla(0, 0%, 100%, 0.3);
+  color: #000;
+  font-weight: 700;
+  opacity: 0.5;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+}
+.form-check-input {
+  display: block;
+}
+/*# sourceMappingURL=main.ed29f7cc.css.map*/
